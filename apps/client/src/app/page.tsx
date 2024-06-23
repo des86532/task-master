@@ -1,4 +1,5 @@
 import styles from './page.module.css';
+import { Button } from '@nextui-org/react';
 
 export default function Index() {
   /*
@@ -13,7 +14,7 @@ export default function Index() {
           <div id="welcome">
             <h1>
               <span> Hello there, </span>
-              Welcome client 👋
+              Welcome client 👋 <Button color="success">click on</Button>
             </h1>
           </div>
 
