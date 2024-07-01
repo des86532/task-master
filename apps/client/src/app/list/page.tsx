@@ -7,7 +7,7 @@ export default function Page() {
       id: 1,
       title: 'Orange',
       description: '$5.50',
-      status: 'todo',
+      status: 'done',
       createdAt: '2021-10-10',
       updateAt: '2021-10-10',
     },
@@ -47,7 +47,7 @@ export default function Page() {
       id: 6,
       title: 'Lemon 2',
       description: '$8.00',
-      status: 'todo',
+      status: 'progress',
       createdAt: '2021-10-10',
       updateAt: '2021-10-10',
     },
@@ -55,7 +55,7 @@ export default function Page() {
       id: 7,
       title: 'Banana',
       description: '$7.50',
-      status: 'todo',
+      status: 'progress',
       createdAt: '2021-10-10',
       updateAt: '2021-10-10',
     },
@@ -63,18 +63,27 @@ export default function Page() {
       id: 8,
       title: 'Watermelon',
       description: '$12.20',
-      status: 'todo',
+      status: 'done',
       createdAt: '2021-10-10',
       updateAt: '2021-10-10',
     },
   ];
 
+  const handleChangeStatus = (status: string) => {
+    console.log(status);
+  };
+
   return (
     <div className="container mx-auto">
-      <Filter></Filter>
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 2xl:grid-cols-6 justify-items-center">
-        {list.map((item, index) => {
-          return <Card card={item} key={index}></Card>;
+      <div className="my-4">
+        <Filter onChangeStatusEvent={handleChangeStatus}></Filter>
+      </div>
+      <div
+        className="grid gap-4 justify-items-center"
+        style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}
+      >
+        {list.map((item) => {
+          return <Card card={item} key={item.id}></Card>;
         })}
       </div>
     </div>

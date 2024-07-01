@@ -9,7 +9,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <NextUIProvider>{children}</NextUIProvider>
+        <NextUIProvider>
+          <div className="container mx-auto">{children}</div>
+        </NextUIProvider>
       </body>
     </html>
   );
