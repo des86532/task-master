@@ -1,5 +1,7 @@
-import Card from '../../components/Card';
-import Filter from '../../components/Filter';
+'use client';
+import React, { useState } from 'react';
+import Card from '@/components/Card';
+import Filter from '@/components/Filter';
 
 export default function Page() {
   const list = [
@@ -7,7 +9,7 @@ export default function Page() {
       id: 1,
       title: 'Orange',
       description: '$5.50',
-      status: 'todo',
+      status: 'done',
       createdAt: '2021-10-10',
       updateAt: '2021-10-10',
     },
@@ -47,7 +49,7 @@ export default function Page() {
       id: 6,
       title: 'Lemon 2',
       description: '$8.00',
-      status: 'todo',
+      status: 'progress',
       createdAt: '2021-10-10',
       updateAt: '2021-10-10',
     },
@@ -55,7 +57,7 @@ export default function Page() {
       id: 7,
       title: 'Banana',
       description: '$7.50',
-      status: 'todo',
+      status: 'progress',
       createdAt: '2021-10-10',
       updateAt: '2021-10-10',
     },
@@ -63,19 +65,44 @@ export default function Page() {
       id: 8,
       title: 'Watermelon',
       description: '$12.20',
-      status: 'todo',
+      status: 'done',
       createdAt: '2021-10-10',
       updateAt: '2021-10-10',
     },
   ];
 
+  const [filteredData, setFilteredData] = useState(list);
+
+  const handleFilter = (filter: { search: string; status: string }) => {
+    const { search, status } = filter;
+    let filtered = list;
+    if (search) {
+      filtered = filtered.filter((item) =>
+        item.title.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    if (status !== 'all') {
+      filtered = filtered.filter((item) => item.status === status);
+    }
+
+    console.log(filter);
+    setFilteredData(filtered);
+  };
+
   return (
     <div className="container mx-auto">
-      <Filter></Filter>
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 2xl:grid-cols-6 justify-items-center">
-        {list.map((item, index) => {
-          return <Card card={item} key={index}></Card>;
-        })}
+      <div className="my-4">
+        <Filter onFilter={handleFilter}></Filter>
+      </div>
+      <div
+        className="grid justify-between gap-4 justify-items-center"
+        style={{ gridTemplateColumns: 'repeat(auto-fit, 200px)' }}
+      >
+        {filteredData.length > 0 ? (
+          filteredData.map((item) => <Card key={item.id} card={item}></Card>)
+        ) : (
+          <div className="text-center">No data found</div>
+        )}
       </div>
     </div>
   );
