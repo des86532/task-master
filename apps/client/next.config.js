@@ -16,8 +16,8 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/board',
-        permanent: true, // 301 永久重定向，如果你只是暂时的重定向，可以设置为 false
+        destination: '/list',
+        permanent: false, // 301 永久重定向，如果你只是暂时的重定向，可以设置为 false
       },
     ];
   },
