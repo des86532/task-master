@@ -14,9 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <NextUIProvider>
-          {children}
-        </NextUIProvider>
+        <NextUIProvider>{children}</NextUIProvider>
       </body>
     </html>
   );
