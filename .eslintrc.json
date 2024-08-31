@@ -24,7 +24,24 @@
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nx/typescript"],
-      "rules": {}
+      "rules": {
+        "no-unused-vars": [
+          "error", // 將警告改為錯誤
+          {
+            "vars": "all",
+            "args": "none",
+            "ignoreRestSiblings": false
+          }
+        ],
+        "@typescript-eslint/no-unused-vars": [
+          "error", // 將警告改為錯誤
+          {
+            "vars": "all",
+            "args": "none",
+            "ignoreRestSiblings": false
+          }
+        ]
+      }
     },
     {
       "files": ["*.js", "*.jsx"],
