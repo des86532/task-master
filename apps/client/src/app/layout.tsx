@@ -1,4 +1,5 @@
 import './global.css';
+import { NextUIProvider } from '@nextui-org/react';
 
 export const metadata = {
   title: 'Welcome to client',
@@ -12,7 +13,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <NextUIProvider>
+          {children}
+        </NextUIProvider>
+      </body>
     </html>
   );
 }
