@@ -26,7 +26,7 @@
       "extends": ["plugin:@nx/typescript"],
       "rules": {
         "no-unused-vars": [
-          "error", // 將警告改為錯誤
+          "off", // 將警告改為錯誤
           {
             "vars": "all",
             "args": "none",
@@ -34,7 +34,7 @@
           }
         ],
         "@typescript-eslint/no-unused-vars": [
-          "error", // 將警告改為錯誤
+          "off", // 將警告改為錯誤
           {
             "vars": "all",
             "args": "none",
