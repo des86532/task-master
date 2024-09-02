@@ -42,6 +42,14 @@ export default function SidebarButton() {
               Board
             </Link>
           </li>
+          <li>
+            <Link
+              className="block py-4 text-lg cursor-pointer hover:text-blue-300"
+              href="/setting"
+            >
+              Setting
+            </Link>
+          </li>
         </ul>
       </div>
 
