@@ -16,7 +16,12 @@
         "name": "next"
       }
     ],
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@task-master/shared/types": ["../../shared/types/src/index.ts"]
+    }
   },
   "include": [
     "**/*.ts",
