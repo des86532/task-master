@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@task-master/shared/mock": ["shared/mock/src/index.ts"],
       "@task-master/shared/types": ["shared/types/src/index.ts"]
     }
   },
