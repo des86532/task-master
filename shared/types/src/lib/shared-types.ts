@@ -11,6 +11,7 @@ const CardSchema = z.object({
   title: z.string(),
   description: z.string(),
   status: z.nativeEnum(CardStatus),
+  priority: z.number(),
   createdAt: z.string(),
   updateAt: z.string(),
 });

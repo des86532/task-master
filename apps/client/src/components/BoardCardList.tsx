@@ -15,28 +15,30 @@ export default function BoardCardList() {
         base: 'shadow-medium p-4',
       }}
     >
-      <ListboxItem key="new">
-        <div className="flex flex-col gap-2">
-          <div className="flex gap-4 items-center">
-            <Avatar
-              alt="fffff"
-              className="flex-shrink-0"
-              size="md"
-              src="https://d2u8k2ocievbld.cloudfront.net/memojis/male/2.png"
-            />
-            <span className="overflow-hidden flex-1 whitespace-nowrap text-ellipsis">
-              title
-            </span>
-            <IconMoreAlt className="w-6 h-6" />
+      {Array.from({ length: 5 }).map((_, index) => (
+        <ListboxItem key={index} textValue="Apple">
+          <div className="flex flex-col gap-2">
+            <div className="flex gap-4 items-center">
+              <Avatar
+                alt="fffff"
+                className="flex-shrink-0"
+                size="md"
+                src="https://d2u8k2ocievbld.cloudfront.net/memojis/male/2.png"
+              />
+              <span className="overflow-hidden flex-1 whitespace-nowrap text-ellipsis">
+                title
+              </span>
+              <IconMoreAlt className="w-6 h-6" />
+            </div>
+            <div className="flex gap-4 items-center">
+              <span className="overflow-hidden flex-1 whitespace-nowrap text-ellipsis">
+                time
+              </span>
+              <IconTrash className="w-6 h-6 text-danger" />
+            </div>
           </div>
-          <div className="flex gap-4 items-center">
-            <span className="overflow-hidden flex-1 whitespace-nowrap text-ellipsis">
-              time
-            </span>
-            <IconTrash className="w-6 h-6 text-danger" />
-          </div>
-        </div>
-      </ListboxItem>
+        </ListboxItem>
+      ))}
     </Listbox>
   );
 }

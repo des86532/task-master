@@ -1,15 +1,27 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '@/components/Card';
 import Filter from '@/components/Filter';
-import { cardListData } from '@task-master/shared/mock';
+import { TASK_API } from '@/app/_api/task';
+import useSWR from 'swr';
+import { CardType } from '@task-master/shared/types';
+
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export default function Page() {
-  const [filteredData, setFilteredData] = useState(cardListData);
+  const {
+    data: cardList,
+    error,
+    isLoading,
+  } = useSWR<CardType[]>(TASK_API.getAllTask(), fetcher);
+  const [filteredData, setFilteredData] = useState(cardList || []);
 
   const handleFilter = (filter: { search: string; status: string }) => {
+    if (!cardList) return;
+
+    // 過濾資料
     const { search, status } = filter;
-    let filtered = cardListData;
+    let filtered = cardList;
     if (search) {
       filtered = filtered.filter((item) =>
         item.title.toLowerCase().includes(search.toLowerCase())
@@ -22,20 +34,28 @@ export default function Page() {
     setFilteredData(filtered);
   };
 
+  useEffect(() => {
+    if (cardList) {
+      setFilteredData(cardList);
+    }
+  }, [cardList]);
+
   return (
-    <div className="container mx-auto">
+    <div className="px-5">
       <div className="my-4">
         <Filter onFilter={handleFilter}></Filter>
       </div>
+
+      {error && <div>Failed to load</div>}
+      {isLoading && <div>Loading...</div>}
+      {!filteredData && <div>No data</div>}
       <div
-        className="grid gap-4 justify-between justify-items-center"
+        className="grid gap-4 justify-start justify-items-center"
         style={{ gridTemplateColumns: 'repeat(auto-fit, 200px)' }}
       >
-        {filteredData.length > 0 ? (
-          filteredData.map((item) => <Card key={item.id} card={item}></Card>)
-        ) : (
-          <div className="text-center">No data found</div>
-        )}
+        {filteredData.map((item) => (
+          <Card key={item.id} card={item}></Card>
+        ))}
       </div>
     </div>
   );

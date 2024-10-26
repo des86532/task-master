@@ -11,7 +11,7 @@ import {
 } from '@nextui-org/react';
 import { useCard } from '@/context/CardContext';
 import Card from '@/components/Card';
-import { cardListData } from '@task-master/shared/mock';
+import { cardListData } from '@/app/_mock/cardList';
 import { CardType } from '@task-master/shared/types';
 
 export default function CardGroupModal() {

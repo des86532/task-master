@@ -8,7 +8,7 @@ export default function SidebarButton() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="p-4">
+    <div className="sticky top-0 z-20 px-5 py-4 w-full bg-white">
       <Button isIconOnly aria-label="Like" onClick={() => setIsOpen(!isOpen)}>
         <Image
           src="/icons/bars.svg"

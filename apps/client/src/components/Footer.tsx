@@ -1,3 +1,3 @@
 export default function Footer() {
-  return <footer className="p-4">Footer</footer>;
+  return <footer className="px-5 py-4">Footer</footer>;
 }
