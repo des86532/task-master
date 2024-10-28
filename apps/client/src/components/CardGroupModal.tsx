@@ -12,13 +12,13 @@ import {
 import { useCard } from '@/context/CardContext';
 import Card from '@/components/Card';
 import { cardListData } from '@/app/_mock/cardList';
-import { CardType } from '@task-master/shared/types';
+import { TaskType } from '@task-master/shared/types';
 
 export default function CardGroupModal() {
   const { isCardGroupModalOpen, setIsCardGroupModalOpen } = useCard();
-  const [selectedCardList, setSelectedCardList] = useState<CardType[]>([]);
+  const [selectedCardList, setSelectedCardList] = useState<TaskType[]>([]);
 
-  const handleToggleSelect = (card: CardType) => {
+  const handleToggleSelect = (card: TaskType) => {
     setSelectedCardList((prev) => {
       if (prev.includes(card)) {
         return prev.filter((c) => c.id !== card.id);
@@ -33,7 +33,6 @@ export default function CardGroupModal() {
   };
 
   const handleAdd = () => {
-    console.log(selectedCardList);
     setIsCardGroupModalOpen(false);
     clearSelectedCardList();
   };

@@ -1,22 +1,24 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
-import { Button } from '@nextui-org/react';
+import { Button, Avatar } from '@nextui-org/react';
 import Link from 'next/link';
 
 export default function SidebarButton() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="sticky top-0 z-20 px-5 py-4 w-full bg-white">
-      <Button isIconOnly aria-label="Like" onClick={() => setIsOpen(!isOpen)}>
-        <Image
-          src="/icons/bars.svg"
-          width={24}
-          height={24}
-          alt="Picture of the author"
-        />
-      </Button>
+    <div className="flex sticky top-0 z-20 justify-between px-5 py-4 w-full bg-white">
+      <div className="flex gap-4">
+        <Button isIconOnly aria-label="Like" onClick={() => setIsOpen(!isOpen)}>
+          <Image
+            src="/icons/bars.svg"
+            width={24}
+            height={24}
+            alt="Picture of the author"
+          />
+        </Button>
+      </div>
 
       {/* 側邊欄 */}
       <div
@@ -60,6 +62,15 @@ export default function SidebarButton() {
           onClick={() => setIsOpen(false)}
         ></div>
       )}
+
+      <div className="flex gap-4">
+        <Avatar
+          alt="fffff"
+          className="flex-shrink-0"
+          size="md"
+          src="https://d2u8k2ocievbld.cloudfront.net/memojis/male/2.png"
+        />
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 import { Input, Select, SelectItem } from '@nextui-org/react';
 import React, { useState } from 'react';
+import { TaskStatus } from '@task-master/shared/types';
 
 export default function Filter({
   onFilter,
@@ -48,14 +49,17 @@ export default function Filter({
           <SelectItem value="all" key="all">
             all
           </SelectItem>
-          <SelectItem value="progress" key="progress">
-            progress
+          <SelectItem value={TaskStatus.PENDING} key={TaskStatus.PENDING}>
+            {TaskStatus.PENDING}
           </SelectItem>
-          <SelectItem value="todo" key="todo">
-            todo
+          <SelectItem value={TaskStatus.PROGRESS} key={TaskStatus.PROGRESS}>
+            {TaskStatus.PROGRESS}
           </SelectItem>
-          <SelectItem value="done" key="done">
-            done
+          <SelectItem value={TaskStatus.TODO} key={TaskStatus.TODO}>
+            {TaskStatus.TODO}
+          </SelectItem>
+          <SelectItem value={TaskStatus.DONE} key={TaskStatus.DONE}>
+            {TaskStatus.DONE}
           </SelectItem>
         </Select>
       </div>

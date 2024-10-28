@@ -4,7 +4,8 @@ import Card from '@/components/Card';
 import Filter from '@/components/Filter';
 import { TASK_API } from '@/app/_api/task';
 import useSWR from 'swr';
-import { CardType } from '@task-master/shared/types';
+import { TaskType } from '@task-master/shared/types';
+import { useCard } from '@/context/CardContext';
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -13,8 +14,9 @@ export default function Page() {
     data: cardList,
     error,
     isLoading,
-  } = useSWR<CardType[]>(TASK_API.getAllTask(), fetcher);
+  } = useSWR<TaskType[]>(TASK_API.getAllTask(), fetcher);
   const [filteredData, setFilteredData] = useState(cardList || []);
+  const { setIsCardModalOpen, setActiveCard } = useCard();
 
   const handleFilter = (filter: { search: string; status: string }) => {
     if (!cardList) return;
@@ -32,6 +34,11 @@ export default function Page() {
     }
 
     setFilteredData(filtered);
+  };
+
+  const handleOpenCard = (card: TaskType) => () => {
+    setActiveCard(card);
+    setIsCardModalOpen(true);
   };
 
   useEffect(() => {
@@ -54,7 +61,12 @@ export default function Page() {
         style={{ gridTemplateColumns: 'repeat(auto-fit, 200px)' }}
       >
         {filteredData.map((item) => (
-          <Card key={item.id} card={item}></Card>
+          <Card
+            key={item.id}
+            card={item}
+            isPressable
+            onClick={handleOpenCard(item)}
+          ></Card>
         ))}
       </div>
     </div>

@@ -1,19 +1,21 @@
 import { z } from 'zod';
 
-export enum CardStatus {
+export enum TaskStatus {
+  PENDING = 'pending',
   TODO = 'todo',
   PROGRESS = 'progress',
   DONE = 'done',
 }
 
-const CardSchema = z.object({
+const TaskSchema = z.object({
   id: z.number(),
   title: z.string(),
   description: z.string(),
-  status: z.nativeEnum(CardStatus),
+  status: z.nativeEnum(TaskStatus),
   priority: z.number(),
-  createdAt: z.string(),
-  updateAt: z.string(),
+  created_at: z.string(),
+  updated_at: z.string(),
+  expired_at: z.string(),
 });
 
-export type CardType = z.infer<typeof CardSchema>;
+export type TaskType = z.infer<typeof TaskSchema>;

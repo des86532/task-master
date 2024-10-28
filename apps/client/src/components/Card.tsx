@@ -6,10 +6,11 @@ import {
   Chip,
   CardProps,
 } from '@nextui-org/react';
-import { CardType } from '@task-master/shared/types';
+import { TaskType } from '@task-master/shared/types';
+import dayjs from 'dayjs';
 
 interface Props extends CardProps {
-  card: CardType;
+  card: TaskType;
   selected?: boolean;
 }
 
@@ -17,7 +18,7 @@ export default function Index({ card, selected, ...props }: Props) {
   return (
     <Card
       key={card.id}
-      className={`w-[200px] h-[200px] cursor-pointer ${
+      className={`w-[200px] h-[200px] cursor-pointer select-none ${
         selected ? 'border-2 border-blue-500' : ''
       }`}
       {...props}
@@ -29,7 +30,7 @@ export default function Index({ card, selected, ...props }: Props) {
         <p>{card.description}</p>
       </CardBody>
       <CardFooter className="justify-between text-small">
-        <span>time</span>
+        <span>{dayjs(card.created_at).format('YYYY/MM/DD HH:mm')}</span>
         <span>
           <Chip size="sm">Small</Chip>
         </span>
