@@ -1,39 +1,35 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { TaskType } from '@task-master/shared/types'; // 导入 TaskType
 
 @Entity('tasks')
-export class Task implements TaskType {
-  // 使 Task 实体实现 TaskType
+export class Task {
   @PrimaryGeneratedColumn()
-  id: TaskType['id']; // 使用 TaskType 的类型
+  id: number;
 
   @Column()
-  title: TaskType['title']; // 使用 TaskType 的类型
+  title: string;
 
   @Column()
-  description: TaskType['description']; // 使用 TaskType 的类型
+  description: string;
 
   @Column()
-  status: TaskType['status']; // 使用 TaskType 的类型
+  status: string;
 
   @Column()
-  priority: TaskType['priority']; // 使用 TaskType 的类型
+  priority: number;
 
   @Column({
     type: 'timestamp',
     nullable: true,
     default: () => 'CURRENT_TIMESTAMP',
   })
-  expired_at: TaskType['expired_at']; // 使用 TaskType 的类型
-  // 修改 expired_at 以允许传入，但不是必需的
+  expired_at: string;
 
   @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     insert: false,
   })
-  created_at: TaskType['created_at']; // 使用 TaskType 的类型
-  // created_at 不可传，自动生成当前时间
+  created_at: string;
 
   @Column({
     type: 'timestamp',
@@ -41,6 +37,5 @@ export class Task implements TaskType {
     onUpdate: 'CURRENT_TIMESTAMP',
     insert: false,
   })
-  updated_at: TaskType['updated_at']; // 使用 TaskType 的类型
-  // updated_at 不可传，更新时自动记录当前时间
+  updated_at: string;
 }
