@@ -10,8 +10,8 @@ export class TasksService {
     private tasksRepository: Repository<Task>
   ) {}
 
-  findAll(): Promise<Task[]> {
-    return this.tasksRepository.find({ order: { id: 'ASC' } });
+  findAll(filter: any): Promise<Task[]> {
+    return this.tasksRepository.find({ where: filter, order: { id: 'ASC' } });
   }
 
   findOne(id: number): Promise<Task> {

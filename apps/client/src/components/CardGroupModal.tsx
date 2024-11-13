@@ -20,7 +20,7 @@ export default function CardGroupModal() {
     data: cardList,
     error,
     isLoading,
-  } = useFetchData<TaskType[]>(TASK_API.getAllTask());
+  } = useFetchData<TaskType[]>(TASK_API.getAllTask(), { status: 'pending' });
   const { isCardGroupModalOpen, setIsCardGroupModalOpen, cardModalStatus } =
     useCard();
   const [selectedCardList, setSelectedCardList] = useState<TaskType[]>([]);
@@ -45,7 +45,6 @@ export default function CardGroupModal() {
         selectedCardList.map(async (card) => {
           await updateTask(card.id, {
             ...card,
-            inboard: true,
             status: cardModalStatus,
           });
         })

@@ -17,9 +17,7 @@ export default function Board() {
   const { setIsCardGroupModalOpen, setCardModalStatus } = useCard();
 
   const filteredCardListByStatus = (status: TaskStatus) => {
-    return (
-      cardList?.filter((card) => card.status === status && card.inboard) ?? []
-    );
+    return cardList?.filter((card) => card.status === status) ?? [];
   };
 
   const handleAdd = (status: TaskStatus) => {

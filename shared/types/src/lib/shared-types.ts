@@ -11,7 +11,6 @@ export type TaskType = {
   description: string;
   status: TaskStatus;
   priority: number;
-  inboard: boolean;
   created_at: string;
   updated_at: string;
   expired_at: string;
