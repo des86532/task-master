@@ -18,6 +18,12 @@ export class Task {
   priority: number;
 
   @Column({
+    type: 'boolean',
+    default: true,
+  })
+  inboard: boolean;
+
+  @Column({
     type: 'timestamp',
     nullable: true,
     default: () => 'CURRENT_TIMESTAMP',

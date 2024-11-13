@@ -3,18 +3,16 @@ import React, { useState, useEffect } from 'react';
 import Card from '@/components/Card';
 import Filter from '@/components/Filter';
 import { TASK_API } from '@/app/_api/task';
-import useSWR from 'swr';
 import { TaskType } from '@task-master/shared/types';
 import { useCard } from '@/context/CardContext';
-
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import useFetchData from '@/app/_hooks/useFetchData';
 
 export default function Page() {
   const {
     data: cardList,
     error,
     isLoading,
-  } = useSWR<TaskType[]>(TASK_API.getAllTask(), fetcher);
+  } = useFetchData<TaskType[]>(TASK_API.getAllTask());
   const [filteredData, setFilteredData] = useState(cardList || []);
   const { setIsCardModalOpen, setActiveCard } = useCard();
 

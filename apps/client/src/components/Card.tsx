@@ -30,9 +30,9 @@ export default function Index({ card, selected, ...props }: Props) {
         <p>{card.description}</p>
       </CardBody>
       <CardFooter className="justify-between text-small">
-        <span>{dayjs(card.created_at).format('YYYY/MM/DD HH:mm')}</span>
+        <span>{dayjs(card.created_at).format('YYYY/MM/DD')}</span>
         <span>
-          <Chip size="sm">Small</Chip>
+          <Chip size="sm">{card.status}</Chip>
         </span>
       </CardFooter>
     </Card>

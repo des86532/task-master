@@ -23,7 +23,7 @@ export default function RootLayout({
             <div className="flex flex-col h-screen">
               <Sidebar />
               <div className="flex-1 w-full">
-                <div className="mx-auto max-w-[1320px]">{children}</div>
+                <div className="mx-auto max-w-[1320px] h-full">{children}</div>
               </div>
               <Footer />
               <CardGroupModal />

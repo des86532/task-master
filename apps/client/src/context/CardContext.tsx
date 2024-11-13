@@ -1,10 +1,12 @@
 'use client';
 import { createContext, useContext, useState } from 'react';
-import { TaskType } from '@task-master/shared/types';
+import { TaskType, TaskStatus } from '@task-master/shared/types';
 
 interface CardContextType {
   isCardGroupModalOpen: boolean;
   setIsCardGroupModalOpen: (value: boolean) => void;
+  cardModalStatus: TaskStatus;
+  setCardModalStatus: (value: TaskStatus) => void;
   isCardModalOpen: boolean;
   setIsCardModalOpen: (value: boolean) => void;
   activeCard: TaskType | null;
@@ -16,6 +18,10 @@ interface CardContextType {
 export const CardContext = createContext<CardContextType>({
   isCardGroupModalOpen: false,
   setIsCardGroupModalOpen: (value: boolean) => {
+    // This is intentionally left empty
+  },
+  cardModalStatus: TaskStatus.TODO,
+  setCardModalStatus: (value: TaskStatus) => {
     // This is intentionally left empty
   },
   isCardModalOpen: false,
@@ -34,6 +40,7 @@ export const CardContext = createContext<CardContextType>({
 
 export const CardProvider = ({ children }: { children: React.ReactNode }) => {
   const [isCardGroupModalOpen, setIsCardGroupModalOpen] = useState(false);
+  const [cardModalStatus, setCardModalStatus] = useState(TaskStatus.TODO);
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
   const [activeCard, setActiveCard] = useState<TaskType | null>(null);
   const [isNewCardModalOpen, setIsNewCardModalOpen] = useState(false);
@@ -43,6 +50,8 @@ export const CardProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         isCardGroupModalOpen,
         setIsCardGroupModalOpen,
+        cardModalStatus,
+        setCardModalStatus,
         isCardModalOpen,
         setIsCardModalOpen,
         activeCard,
