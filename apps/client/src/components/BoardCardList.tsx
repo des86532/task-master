@@ -44,7 +44,7 @@ export default function BoardCardList({
     <Listbox
       aria-label="Actions"
       classNames={{
-        base: 'flex-1',
+        base: 'flex-1 overflow-auto scrollbar-hide',
         list: 'gap-4 py-4',
       }}
       itemClasses={{
@@ -55,6 +55,7 @@ export default function BoardCardList({
         <ListboxItem
           key={card.id}
           textValue={card.title}
+          className="h-[104px]"
           onClick={() => handleOpenCard(card)}
         >
           <div className="flex flex-col gap-2">

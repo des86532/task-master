@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Modal,
   ModalHeader,
@@ -12,17 +12,16 @@ import {
 import { useCard } from '@/context/CardContext';
 import Card from '@/components/Card';
 import { TaskType } from '@task-master/shared/types';
-import useFetchData from '@/app/_hooks/useFetchData';
-import { TASK_API, updateTask } from '@/app/_api/task';
+import { getAllTask, patchManyTask } from '@/app/_api/task';
 
 export default function CardGroupModal() {
+  const [cardList, setCardList] = useState<TaskType[]>([]);
   const {
-    data: cardList,
-    error,
-    isLoading,
-  } = useFetchData<TaskType[]>(TASK_API.getAllTask(), { status: 'pending' });
-  const { isCardGroupModalOpen, setIsCardGroupModalOpen, cardModalStatus } =
-    useCard();
+    isCardGroupModalOpen,
+    setIsCardGroupModalOpen,
+    cardModalStatus,
+    updateCard,
+  } = useCard();
   const [selectedCardList, setSelectedCardList] = useState<TaskType[]>([]);
 
   const handleToggleSelect = (card: TaskType) => {
@@ -41,14 +40,11 @@ export default function CardGroupModal() {
 
   const handleAdd = async () => {
     try {
-      await Promise.all(
-        selectedCardList.map(async (card) => {
-          await updateTask(card.id, {
-            ...card,
-            status: cardModalStatus,
-          });
-        })
+      await patchManyTask(
+        selectedCardList.map((item) => item.id),
+        { status: cardModalStatus }
       );
+      updateCard();
       setIsCardGroupModalOpen(false);
       clearSelectedCardList();
     } catch (error) {
@@ -59,6 +55,21 @@ export default function CardGroupModal() {
   const clearSelectedCardList = () => {
     setSelectedCardList([]);
   };
+
+  const fetchData = async () => {
+    try {
+      const response = await getAllTask({ status: 'pending' });
+      setCardList(response);
+    } catch (error) {
+      console.error('Failed to fetch data:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (isCardGroupModalOpen) {
+      fetchData();
+    }
+  }, [isCardGroupModalOpen]);
 
   return (
     <Modal
@@ -72,6 +83,11 @@ export default function CardGroupModal() {
         <>
           <ModalHeader className="flex flex-col gap-1">Card Group</ModalHeader>
           <ModalBody>
+            {cardList.length === 0 && (
+              <div className="flex justify-center items-center h-full">
+                No card found
+              </div>
+            )}
             <div
               className="grid gap-4 justify-start justify-items-center"
               style={{ gridTemplateColumns: 'repeat(auto-fit, 200px)' }}

@@ -36,8 +36,20 @@ export class TasksController {
     return this.tasksService.update(+id, task);
   }
 
+  @Patch(':id')
+  patch(@Param('id') id: string, @Body() task: Partial<Task>): Promise<Task> {
+    return this.tasksService.update(+id, task);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string): Promise<void> {
     return this.tasksService.remove(+id);
+  }
+
+  @Patch()
+  patchMany(
+    @Body() payload: { ids: number[]; task: Partial<Task> }
+  ): Promise<Task[]> {
+    return this.tasksService.patchMany(payload.ids, payload.task);
   }
 }

@@ -11,7 +11,7 @@ import {
   SelectItem,
   DatePicker,
 } from '@nextui-org/react';
-import { getLocalTimeZone, today, parseDate } from '@internationalized/date';
+import { getLocalTimeZone, today } from '@internationalized/date';
 import { useState } from 'react';
 import { createTask } from '@/app/_api/task';
 import { TaskStatus } from '@task-master/shared/types';
@@ -19,7 +19,7 @@ import { TaskStatus } from '@task-master/shared/types';
 import { useCard } from '@/context/CardContext';
 
 export default function NewCardModal() {
-  const { isNewCardModalOpen, setIsNewCardModalOpen } = useCard();
+  const { isNewCardModalOpen, setIsNewCardModalOpen, updateCard } = useCard();
 
   // 新增狀態來管理表單資料
   const [title, setTitle] = useState('');
@@ -46,6 +46,7 @@ export default function NewCardModal() {
       };
 
       await createTask(payload);
+      updateCard();
       onOpenChange();
     } catch (error) {
       console.error('Error:', error);

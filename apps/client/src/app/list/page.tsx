@@ -2,19 +2,18 @@
 import React, { useState, useEffect } from 'react';
 import Card from '@/components/Card';
 import Filter from '@/components/Filter';
-import { TASK_API } from '@/app/_api/task';
 import { TaskType } from '@task-master/shared/types';
 import { useCard } from '@/context/CardContext';
-import useFetchData from '@/app/_hooks/useFetchData';
 
 export default function Page() {
   const {
-    data: cardList,
-    error,
-    isLoading,
-  } = useFetchData<TaskType[]>(TASK_API.getAllTask());
+    setIsCardModalOpen,
+    setActiveCard,
+    cardList,
+    cardError: error,
+    cardLoading: isLoading,
+  } = useCard();
   const [filteredData, setFilteredData] = useState(cardList || []);
-  const { setIsCardModalOpen, setActiveCard } = useCard();
 
   const handleFilter = (filter: { search: string; status: string }) => {
     if (!cardList) return;

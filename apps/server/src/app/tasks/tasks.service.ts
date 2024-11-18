@@ -31,4 +31,12 @@ export class TasksService {
   async remove(id: number): Promise<void> {
     await this.tasksRepository.delete(id);
   }
+
+  async patchMany(ids: number[], task: Partial<Task>): Promise<Task[]> {
+    const tasks = await this.tasksRepository.findByIds(ids);
+    tasks.forEach((item) => {
+      Object.assign(item, task);
+    });
+    return this.tasksRepository.save(tasks);
+  }
 }

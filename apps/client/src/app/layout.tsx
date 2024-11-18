@@ -22,8 +22,10 @@ export default function RootLayout({
           <CardProvider>
             <div className="flex flex-col h-screen">
               <Sidebar />
-              <div className="flex-1 w-full">
-                <div className="mx-auto max-w-[1320px] h-full">{children}</div>
+              <div className="overflow-auto flex-1 w-full">
+                <div className="mx-auto max-w-[1320px] h-full overflow-y-auto scrollbar-hide">
+                  {children}
+                </div>
               </div>
               <Footer />
               <CardGroupModal />
