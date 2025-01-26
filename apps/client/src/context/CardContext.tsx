@@ -1,6 +1,6 @@
 'use client';
 import { createContext, useContext, useState } from 'react';
-import { TaskType, TaskStatus } from '@task-master/shared/types';
+import { TaskType, TaskStatus } from '@task-master/shared';
 import useFetchData from '@/app/_hooks/useFetchData';
 import { TASK_API } from '@/app/_api/task';
 

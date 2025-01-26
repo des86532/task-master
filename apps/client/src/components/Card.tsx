@@ -6,7 +6,7 @@ import {
   Chip,
   CardProps,
 } from '@nextui-org/react';
-import { TaskType } from '@task-master/shared/types';
+import { TaskType } from '@task-master/shared';
 import dayjs from 'dayjs';
 
 interface Props extends CardProps {

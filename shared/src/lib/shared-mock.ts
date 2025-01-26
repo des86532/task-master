@@ -1,4 +1,4 @@
-import { TaskType, TaskStatus } from '@task-master/shared/types';
+import { TaskType, TaskStatus } from './shared-types';
 
 export const cardListData: TaskType[] = [
   {

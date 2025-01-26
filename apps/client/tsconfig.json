@@ -20,7 +20,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@task-master/shared/types": ["../../shared/types/src/index.ts"]
+      "@task-master/shared": ["../../shared/src/index.ts"]
     }
   },
   "include": [

@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@task-master/shared/types": ["shared/types/src/index.ts"]
+      "@task-master/shared": ["shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -11,7 +11,7 @@ import {
 } from '@nextui-org/react';
 import { useCard } from '@/context/CardContext';
 import Card from '@/components/Card';
-import { TaskType } from '@task-master/shared/types';
+import { TaskType } from '@task-master/shared';
 import { getAllTask, patchManyTask } from '@/app/_api/task';
 
 export default function CardGroupModal() {

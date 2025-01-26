@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Card from '@/components/Card';
 import Filter from '@/components/Filter';
-import { TaskType } from '@task-master/shared/types';
+import { TaskType } from '@task-master/shared';
 import { useCard } from '@/context/CardContext';
 
 export default function Page() {
