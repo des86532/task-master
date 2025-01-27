@@ -4,7 +4,7 @@ import { useCard } from '@/context/CardContext';
 import BoardCardList from '@/components/BoardCardList';
 import { deleteTask } from '@/app/_api/task';
 import { Suspense } from 'react';
-import { TaskType, TaskStatus } from '@task-master/shared/types';
+import { TaskType, TaskStatus } from '@task-master/shared';
 
 export default function Board() {
   const { setIsCardGroupModalOpen, setCardModalStatus, cardList, updateCard } =

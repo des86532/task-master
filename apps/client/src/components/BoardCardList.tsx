@@ -10,7 +10,7 @@ import {
 import { Avatar } from '@nextui-org/react';
 import IconMoreAlt from '@/icons/iconMoreAlt';
 import IconTrash from '@/icons/iconTrash';
-import { TaskType } from '@task-master/shared/types';
+import { TaskType } from '@task-master/shared';
 import dayjs from 'dayjs';
 import { useCard } from '@/context/CardContext';
 

@@ -14,7 +14,7 @@ import {
 import { getLocalTimeZone, today } from '@internationalized/date';
 import { useState } from 'react';
 import { createTask } from '@/app/_api/task';
-import { TaskStatus } from '@task-master/shared/types';
+import { TaskStatus } from '@task-master/shared';
 
 import { useCard } from '@/context/CardContext';
 
