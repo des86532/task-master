@@ -9,7 +9,7 @@ export default function FloatingIcons() {
   const { setIsNewCardModalOpen } = useCard();
 
   return (
-    <div className="flex fixed right-4 top-1/2 z-10 flex-col items-center rounded-full -translate-y-1/2">
+    <div className="hidden fixed right-4 top-1/2 z-10 flex-col items-center rounded-full -translate-y-1/2 md:flex">
       <div
         className={`flex overflow-hidden relative flex-col gap-4 p-2 w-14 rounded-full duration-500 ease-in-out bg-slate-500 transition-height`}
         style={{

@@ -39,7 +39,7 @@ export default function Filter({
           onChange={handleChangeSearch}
         />
       </div>
-      <div className="w-1/5">
+      <div className="w-2/5 md:w-1/5">
         <Select
           label="Select status"
           value={status}

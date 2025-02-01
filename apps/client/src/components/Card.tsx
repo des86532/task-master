@@ -18,7 +18,7 @@ export default function Index({ card, selected, ...props }: Props) {
   return (
     <Card
       key={card.id}
-      className={`w-[200px] h-[200px] cursor-pointer select-none ${
+      className={`w-full h-[200px] md:w-[200px] cursor-pointer select-none ${
         selected ? 'border-2 border-blue-500' : ''
       }`}
       {...props}

@@ -45,7 +45,7 @@ export default function Page() {
   }, [cardList]);
 
   return (
-    <div className="px-5">
+    <div className="px-5 pb-2">
       <div className="my-4">
         <Filter onFilter={handleFilter}></Filter>
       </div>
@@ -53,10 +53,7 @@ export default function Page() {
       {error && <div>Failed to load</div>}
       {isLoading && <div>Loading...</div>}
       {!filteredData && <div>No data</div>}
-      <div
-        className="grid gap-4 justify-start justify-items-center"
-        style={{ gridTemplateColumns: 'repeat(auto-fit, 200px)' }}
-      >
+      <div className="grid grid-cols-[repeat(auto-fit,100%)] gap-4 justify-start justify-items-center md:grid-cols-[repeat(auto-fit,200px)]">
         {filteredData.map((item) => (
           <Card
             key={item.id}
