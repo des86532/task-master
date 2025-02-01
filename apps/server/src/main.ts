@@ -14,7 +14,10 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
 
   app.enableCors({
-    origin: 'http://localhost:3000', // 允許的來源
+    origin: [
+      'https://task-master-frontend-xi.vercel.app',
+      'http://localhost:3000',
+    ], // 允許的來源
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // 允許的 HTTP 方法
     credentials: true, // 如果需要允許帶有憑證的請求
   });

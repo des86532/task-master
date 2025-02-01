@@ -10,13 +10,12 @@ import { Task } from './tasks/task.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '',
-      database: 'task_master',
+      url:
+        process.env.NODE_ENV == 'production'
+          ? process.env.DATABASE_URL
+          : 'postgres://postgres:postgres@localhost:5432/task_master',
       entities: [Task],
-      synchronize: true, // 注意：在生產環境中應設置為 false
+      synchronize: process.env.NODE_ENV !== 'production',
     }),
     TasksModule,
   ],
