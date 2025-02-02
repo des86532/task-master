@@ -42,6 +42,8 @@ export default function NewCardModal() {
         expired_at: new Date(
           expiredAt.toDate(getLocalTimeZone()).setHours(23, 59, 59)
         ).toISOString(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
         description,
       };
 

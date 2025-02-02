@@ -27,7 +27,7 @@ export class Task {
   @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
-    insert: false,
+    // insert: false,
   })
   created_at: string;
 
@@ -35,7 +35,7 @@ export class Task {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
-    insert: false,
+    // insert: false,
   })
   updated_at: string;
 }
