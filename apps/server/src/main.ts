@@ -15,7 +15,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      'https://task-master-frontend-xi.vercel.app',
+      'https://demo-task-master-frontend-xi.vercel.app',
       'http://localhost:3000',
     ], // 允許的來源
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // 允許的 HTTP 方法

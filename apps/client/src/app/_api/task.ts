@@ -2,7 +2,7 @@ import { TaskType } from '@task-master/shared';
 
 const API_BASE_URL =
   process.env.NODE_ENV === 'production'
-    ? 'https://task-master-production-e56f.up.railway.app'
+    ? 'https://task-master-demo-production.up.railway.app'
     : 'http://localhost:3001';
 
 export const TASK_API = {

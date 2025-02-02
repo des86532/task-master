@@ -1,42 +1,49 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Task } from './task.entity';
+import { cardListData } from '@task-master/shared';
 
 @Injectable()
 export class TasksService {
-  constructor(
-    @InjectRepository(Task)
-    private tasksRepository: Repository<Task>
-  ) {}
+  private tasks: Task[] = []; // In-memory storage for tasks
+
+  constructor() {
+    this.tasks = cardListData; // Initialize with existing data if needed
+  }
 
   findAll(filter: any): Promise<Task[]> {
-    return this.tasksRepository.find({ where: filter, order: { id: 'ASC' } });
+    return Promise.resolve(this.tasks); // Return in-memory tasks
   }
 
   findOne(id: number): Promise<Task> {
-    return this.tasksRepository.findOne({ where: { id } });
+    const task = this.tasks.find((task) => task.id === id);
+    return Promise.resolve(task); // Return found task or undefined
   }
 
   async create(task: Partial<Task>): Promise<Task> {
-    const newTask = this.tasksRepository.create(task);
-    return this.tasksRepository.save(newTask);
+    const newTask = { id: this.tasks.length + 1, ...task } as Task; // Assign a new ID
+    this.tasks.push(newTask); // Add to in-memory storage
+    return Promise.resolve(newTask);
   }
 
   async update(id: number, task: Partial<Task>): Promise<Task> {
-    await this.tasksRepository.update(id, task);
-    return this.tasksRepository.findOne({ where: { id } });
+    const index = this.tasks.findIndex((t) => t.id === id);
+    if (index > -1) {
+      this.tasks[index] = { ...this.tasks[index], ...task }; // Update task
+      return Promise.resolve(this.tasks[index]);
+    }
+    return Promise.reject(new Error('Task not found'));
   }
 
   async remove(id: number): Promise<void> {
-    await this.tasksRepository.delete(id);
+    this.tasks = this.tasks.filter((task) => task.id !== id); // Remove task
+    return Promise.resolve();
   }
 
   async patchMany(ids: number[], task: Partial<Task>): Promise<Task[]> {
-    const tasks = await this.tasksRepository.findByIds(ids);
-    tasks.forEach((item) => {
+    const updatedTasks = this.tasks.filter((item) => ids.includes(item.id));
+    updatedTasks.forEach((item) => {
       Object.assign(item, task);
     });
-    return this.tasksRepository.save(tasks);
+    return Promise.resolve(updatedTasks); // Return updated tasks
   }
 }
