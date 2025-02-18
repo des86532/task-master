@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button } from '@nextui-org/react';
+import { Button } from '@heroui/react';
 import Image from 'next/image';
 import { useCard } from '@/context/CardContext';
 
@@ -22,7 +22,7 @@ export default function FloatingIcons() {
           size="md"
           aria-label="Like"
           className="flex-shrink-0"
-          onClick={() => setIsNewCardModalOpen(true)}
+          onPress={() => setIsNewCardModalOpen(true)}
         >
           <Image
             src="/icons/plus.svg"
@@ -37,7 +37,7 @@ export default function FloatingIcons() {
           size="md"
           aria-label="Like"
           className="flex-shrink-0"
-          onClick={() => setIsNewCardModalOpen(true)}
+          onPress={() => setIsNewCardModalOpen(true)}
         >
           <Image
             src="/icons/plus.svg"
@@ -52,7 +52,7 @@ export default function FloatingIcons() {
           size="md"
           aria-label="Like"
           className="flex-shrink-0"
-          onClick={() => setIsNewCardModalOpen(true)}
+          onPress={() => setIsNewCardModalOpen(true)}
         >
           <Image
             src="/icons/plus.svg"
@@ -69,7 +69,7 @@ export default function FloatingIcons() {
           size="sm"
           aria-label="Like"
           className="bg-transparent"
-          onClick={() => setIsOpen(!isOpen)}
+          onPress={() => setIsOpen(!isOpen)}
         >
           <Image
             src="/icons/angle-down.svg"

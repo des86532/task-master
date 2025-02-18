@@ -49,7 +49,7 @@ export default function Page() {
             key={item.id}
             card={item}
             isPressable
-            onClick={handleOpenCard(item)}
+            onPress={handleOpenCard(item)}
           ></Card>
         ))}
       </div>

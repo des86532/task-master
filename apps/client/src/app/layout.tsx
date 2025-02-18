@@ -1,7 +1,7 @@
 'use client';
 
 import './global.css';
-import { NextUIProvider } from '@nextui-org/react';
+import { HeroUIProvider } from '@heroui/react';
 import Sidebar from '@/components/Sidebar';
 import Footer from '@/components/Footer';
 import { AppProvideer } from '@/context/AppContext';
@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <NextUIProvider>
+        <HeroUIProvider>
           <AppProvideer>
             <CardProvider>
               <div className="flex flex-col h-screen">
@@ -37,7 +37,7 @@ export default function RootLayout({
               </div>
             </CardProvider>
           </AppProvideer>
-        </NextUIProvider>
+        </HeroUIProvider>
       </body>
     </html>
   );

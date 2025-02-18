@@ -6,8 +6,8 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Button,
-} from '@nextui-org/react';
-import { Avatar } from '@nextui-org/react';
+} from '@heroui/react';
+import { Avatar } from '@heroui/react';
 import IconMoreAlt from '@/icons/iconMoreAlt';
 import IconTrash from '@/icons/iconTrash';
 import { TaskType } from '@task-master/shared';
@@ -56,7 +56,7 @@ export default function BoardCardList({
           key={card.id}
           textValue={card.title}
           className="h-[104px]"
-          onClick={() => handleOpenCard(card)}
+          onPress={() => handleOpenCard(card)}
         >
           <div className="flex flex-col gap-2">
             <div className="flex gap-4 items-center">
@@ -80,16 +80,7 @@ export default function BoardCardList({
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Static Actions">
-                  <DropdownItem key="new">New file</DropdownItem>
-                  <DropdownItem key="copy">Copy link</DropdownItem>
                   <DropdownItem key="edit">Edit file</DropdownItem>
-                  <DropdownItem
-                    key="delete"
-                    className="text-danger"
-                    color="danger"
-                  >
-                    Delete file
-                  </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </div>
