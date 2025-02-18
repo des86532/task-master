@@ -8,7 +8,7 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-} from '@nextui-org/react';
+} from '@heroui/react';
 import { useCard } from '@/context/CardContext';
 import Card from '@/components/Card';
 import { TaskType } from '@task-master/shared';

@@ -1,5 +1,5 @@
 'use client';
-import { Button, Select, SelectItem } from '@nextui-org/react';
+import { Button, Select, SelectItem } from '@heroui/react';
 import { useCard } from '@/context/CardContext';
 import { useApp } from '@/context/AppContext';
 import BoardCardList from '@/components/BoardCardList';

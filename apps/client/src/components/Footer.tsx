@@ -1,4 +1,4 @@
-import { Avatar, Button } from '@nextui-org/react';
+import { Avatar, Button } from '@heroui/react';
 import Image from 'next/image';
 import { useCard } from '@/context/CardContext';
 
@@ -13,7 +13,7 @@ export default function Footer() {
         size="sm"
         aria-label="Like"
         className="flex-shrink-0 md:hidden"
-        onClick={() => setIsNewCardModalOpen(true)}
+        onPress={() => setIsNewCardModalOpen(true)}
       >
         <Image
           src="/icons/plus.svg"

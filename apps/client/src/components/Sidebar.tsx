@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
-import { Button, Avatar } from '@nextui-org/react';
+import { Button, Avatar } from '@heroui/react';
 import Link from 'next/link';
 
 export default function SidebarButton() {
@@ -10,7 +10,7 @@ export default function SidebarButton() {
   return (
     <div className="flex sticky top-0 z-20 justify-between px-5 py-4 w-full bg-white">
       <div className="flex gap-4">
-        <Button isIconOnly aria-label="Like" onClick={() => setIsOpen(!isOpen)}>
+        <Button isIconOnly aria-label="Like" onPress={() => setIsOpen(!isOpen)}>
           <Image
             src="/icons/bars.svg"
             width={24}

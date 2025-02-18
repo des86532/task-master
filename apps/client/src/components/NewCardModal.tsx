@@ -10,7 +10,7 @@ import {
   Select,
   SelectItem,
   DatePicker,
-} from '@nextui-org/react';
+} from '@heroui/react';
 import { getLocalTimeZone, today } from '@internationalized/date';
 import { useState } from 'react';
 import { createTask } from '@/app/_api/task';

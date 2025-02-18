@@ -5,7 +5,7 @@ import {
   CardHeader,
   Chip,
   CardProps,
-} from '@nextui-org/react';
+} from '@heroui/react';
 import { TaskType } from '@task-master/shared';
 import dayjs from 'dayjs';
 

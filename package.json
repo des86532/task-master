@@ -23,7 +23,7 @@
     "@nestjs/core": "^10.0.2",
     "@nestjs/platform-express": "^10.0.2",
     "@nestjs/typeorm": "^10.0.2",
-    "@nextui-org/react": "^2.4.6",
+    "@heroui/react": "2.6.14",
     "@nx/react": "^19.6.4",
     "@testing-library/react": "^16.0.1",
     "axios": "^1.7.6",
