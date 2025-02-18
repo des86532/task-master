@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import Card from '@/components/Card';
 import Filter from '@/components/Filter';
 import { TaskType } from '@task-master/shared';
@@ -13,36 +13,26 @@ export default function Page() {
     cardError: error,
     cardLoading: isLoading,
   } = useCard();
-  const [filteredData, setFilteredData] = useState(cardList || []);
+  const [filterState, setFilterState] = useState({ search: '', status: 'all' });
 
   const handleFilter = (filter: { search: string; status: string }) => {
-    if (!cardList) return;
-
-    // 過濾資料
-    const { search, status } = filter;
-    let filtered = cardList;
-    if (search) {
-      filtered = filtered.filter((item) =>
-        item.title.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-    if (status !== 'all') {
-      filtered = filtered.filter((item) => item.status === status);
-    }
-
-    setFilteredData(filtered);
+    setFilterState(filter);
   };
+
+  const filteredData = useMemo(() => {
+    if (!cardList) return [];
+    const { search, status } = filterState;
+    return cardList.filter(
+      (item) =>
+        (!search || item.title.toLowerCase().includes(search.toLowerCase())) &&
+        (status === 'all' || item.status === status)
+    );
+  }, [filterState, cardList]);
 
   const handleOpenCard = (card: TaskType) => () => {
     setActiveCard(card);
     setIsCardModalOpen(true);
   };
-
-  useEffect(() => {
-    if (cardList) {
-      setFilteredData(cardList);
-    }
-  }, [cardList]);
 
   return (
     <div className="px-5 pb-2">
@@ -50,9 +40,9 @@ export default function Page() {
         <Filter onFilter={handleFilter}></Filter>
       </div>
 
-      {error && <div>Failed to load</div>}
+      {error && <div>Error: {error.message || 'Failed to load'}</div>}
       {isLoading && <div>Loading...</div>}
-      {!filteredData && <div>No data</div>}
+      {filteredData.length === 0 && <div>No data</div>}
       <div className="grid grid-cols-[repeat(auto-fit,100%)] gap-4 justify-start justify-items-center md:grid-cols-[repeat(auto-fit,200px)]">
         {filteredData.map((item) => (
           <Card
