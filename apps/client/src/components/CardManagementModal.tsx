@@ -21,7 +21,6 @@ import {
 import { useEffect, useState } from 'react';
 import { createTask, patchTask } from '@/app/_api/task';
 import { TaskStatus } from '@task-master/shared';
-
 import { useCard } from '@/context/CardContext';
 
 export default function CardManagementModal() {
