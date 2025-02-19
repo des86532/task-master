@@ -18,7 +18,7 @@ import {
   CalendarDate,
   toCalendarDate,
 } from '@internationalized/date';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createTask, patchTask } from '@/app/_api/task';
 import { TaskStatus } from '@task-master/shared';
 import { useCard } from '@/context/CardContext';
@@ -28,8 +28,9 @@ export default function CardManagementModal() {
     isCardManagementModalOpen,
     setIsCardManagementModalOpen,
     updateCards,
-    activeCard,
     setActiveCard,
+    activeCard,
+    cardList,
   } = useCard();
 
   type FormData = {
@@ -53,10 +54,6 @@ export default function CardManagementModal() {
     value: FormData[keyof FormData]
   ) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleModalClose = () => {
-    setActiveCard(null);
   };
 
   // modal 開關
@@ -100,27 +97,32 @@ export default function CardManagementModal() {
     }
   };
 
-  useEffect(() => {
-    if (!isCardManagementModalOpen) return;
+  const memoizedActiveCard = useMemo(() => {
+    return cardList?.find((card) => card.id === activeCard?.id) || null;
+  }, [cardList, activeCard?.id]);
 
-    if (activeCard) {
-      setFormData({
-        title: activeCard.title,
-        priority: activeCard.priority,
-        status: activeCard.status,
-        expired_at: toCalendarDate(
-          parseAbsolute(activeCard.expired_at, getLocalTimeZone())
-        ),
-        description: activeCard.description,
-      });
-    }
+  useEffect(() => {
+    setActiveCard(memoizedActiveCard);
+  }, [memoizedActiveCard, setActiveCard]);
+
+  useEffect(() => {
+    if (!isCardManagementModalOpen || !activeCard) return;
+
+    setFormData({
+      title: activeCard.title,
+      priority: activeCard.priority,
+      status: activeCard.status,
+      expired_at: toCalendarDate(
+        parseAbsolute(activeCard.expired_at, getLocalTimeZone())
+      ),
+      description: activeCard.description,
+    });
   }, [isCardManagementModalOpen, activeCard]);
 
   return (
     <Modal
       isOpen={isCardManagementModalOpen}
       backdrop="blur"
-      onClose={handleModalClose}
       onOpenChange={onOpenChange}
     >
       <ModalContent>
@@ -191,7 +193,7 @@ export default function CardManagementModal() {
                 Close
               </Button>
               <Button color="primary" onPress={handleSubmit}>
-                Add
+                {activeCard ? 'Confirm' : 'Add'}
               </Button>
             </ModalFooter>
           </>

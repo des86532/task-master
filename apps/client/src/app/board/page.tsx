@@ -29,10 +29,10 @@ export default function Board() {
     if (window.confirm('Are you sure you want to delete this card?')) {
       try {
         await deleteTask(card.id);
-        console.log('刪除成功');
+        alert('刪除卡片成功');
         updateCards();
       } catch (error) {
-        console.log('刪除失敗', error);
+        alert('刪除卡片失敗');
       }
     }
   };

@@ -8,10 +8,17 @@ import {
 } from '@heroui/react';
 import { useCard } from '@/context/CardContext';
 import { useEffect } from 'react';
+import { deleteTask } from '@/app/_api/task';
 
 export default function CardModal() {
-  const { isCardModalOpen, setIsCardModalOpen, activeCard, setActiveCard } =
-    useCard();
+  const {
+    isCardModalOpen,
+    setIsCardModalOpen,
+    activeCard,
+    setActiveCard,
+    setIsCardManagementModalOpen,
+    updateCards,
+  } = useCard();
 
   const onOpenChange = () => {
     setIsCardModalOpen(!isCardModalOpen);
@@ -19,6 +26,24 @@ export default function CardModal() {
 
   const handleModalClose = () => {
     setActiveCard(null);
+  };
+
+  const handleCardEdit = () => {
+    setIsCardManagementModalOpen(true);
+  };
+
+  const handleCardDelete = async () => {
+    if (!activeCard) return;
+
+    if (window.confirm('Are you sure you want to delete this card?')) {
+      try {
+        await deleteTask(activeCard.id);
+        alert('刪除卡片成功');
+        updateCards();
+      } catch (error) {
+        alert('刪除卡片失敗');
+      }
+    }
   };
 
   useEffect(() => {
@@ -42,11 +67,11 @@ export default function CardModal() {
               <p>{activeCard ? activeCard.description : 'No card selected'}</p>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
-                Close
+              <Button color="danger" variant="light" onPress={handleCardDelete}>
+                Delete
               </Button>
-              <Button color="primary" onPress={onClose}>
-                Action
+              <Button color="primary" onPress={handleCardEdit}>
+                Edit
               </Button>
             </ModalFooter>
           </>
