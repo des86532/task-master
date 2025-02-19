@@ -13,12 +13,12 @@ interface CardContextType {
   setIsCardModalOpen: (value: boolean) => void;
   activeCard: TaskType | null;
   setActiveCard: (value: TaskType | null) => void;
-  isNewCardModalOpen: boolean;
-  setIsNewCardModalOpen: (value: boolean) => void;
+  isCardManagementModalOpen: boolean;
+  setIsCardManagementModalOpen: (value: boolean) => void;
   cardList: TaskType[] | undefined;
   cardError: Error | undefined;
   cardLoading: boolean;
-  updateCard: () => void;
+  updateCards: () => void;
 }
 
 export const CardContext = createContext<CardContextType>({
@@ -38,15 +38,15 @@ export const CardContext = createContext<CardContextType>({
   setActiveCard: () => {
     throw new Error('setActiveCard function must be overridden');
   },
-  isNewCardModalOpen: false,
-  setIsNewCardModalOpen: () => {
-    throw new Error('setIsNewCardModalOpen function must be overridden');
+  isCardManagementModalOpen: false,
+  setIsCardManagementModalOpen: () => {
+    throw new Error('setIsCardManagementModalOpen function must be overridden');
   },
   cardList: [],
   cardError: undefined,
   cardLoading: false,
-  updateCard: () => {
-    throw new Error('updateCard function must be overridden');
+  updateCards: () => {
+    throw new Error('updateCards function must be overridden');
   },
 });
 
@@ -55,12 +55,13 @@ export const CardProvider = ({ children }: { children: React.ReactNode }) => {
   const [cardModalStatus, setCardModalStatus] = useState(TaskStatus.TODO);
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
   const [activeCard, setActiveCard] = useState<TaskType | null>(null);
-  const [isNewCardModalOpen, setIsNewCardModalOpen] = useState(false);
+  const [isCardManagementModalOpen, setIsCardManagementModalOpen] =
+    useState(false);
   const {
     data: cardList,
     error: cardError,
     isLoading: cardLoading,
-    mutate: updateCard,
+    mutate: updateCards,
   } = useFetchData<TaskType[]>(TASK_API.allTask());
 
   return (
@@ -74,12 +75,12 @@ export const CardProvider = ({ children }: { children: React.ReactNode }) => {
         setIsCardModalOpen,
         activeCard,
         setActiveCard,
-        isNewCardModalOpen,
-        setIsNewCardModalOpen,
+        isCardManagementModalOpen,
+        setIsCardManagementModalOpen,
         cardList,
         cardError,
         cardLoading,
-        updateCard,
+        updateCards,
       }}
     >
       {children}

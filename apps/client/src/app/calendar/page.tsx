@@ -4,14 +4,6 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
 export default function Page() {
-  const handleDateClick = (arg) => {
-    alert(arg.dateStr);
-  };
-
-  const handleEventClick = (arg) => {
-    alert(arg.event.title);
-  };
-
   return (
     <div className="demo-app-main">
       <FullCalendar
@@ -26,8 +18,6 @@ export default function Page() {
         selectable={true}
         selectMirror={true}
         dayMaxEvents={true}
-        dateClick={handleDateClick}
-        eventClick={handleEventClick}
         eventAdd={(info) => {
           alert(info.event.title);
         }}

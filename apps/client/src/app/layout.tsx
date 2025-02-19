@@ -8,7 +8,7 @@ import { AppProvideer } from '@/context/AppContext';
 import { CardProvider } from '@/context/CardContext';
 import CardGroupModal from '@/components/CardGroupModal';
 import CardModal from '@/components/CardModal';
-import NewCardModal from '@/components/NewCardModal';
+import CardManagementModal from '@/components/CardManagementModal';
 import FloatingIcons from '@/components/FloatingIcons';
 
 export default function RootLayout({
@@ -32,7 +32,7 @@ export default function RootLayout({
                 <Footer />
                 <CardGroupModal />
                 <CardModal />
-                <NewCardModal />
+                <CardManagementModal />
                 <FloatingIcons />
               </div>
             </CardProvider>

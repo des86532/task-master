@@ -21,13 +21,21 @@ export default function BoardCardList({
   list?: TaskType[];
   onDelete?: (card: TaskType) => void;
 }) {
-  const { setIsCardModalOpen, setActiveCard } = useCard();
+  const { setIsCardModalOpen, setActiveCard, setIsCardManagementModalOpen } =
+    useCard();
 
   const handleOpenCard = (card: TaskType) => {
     if (!card) return;
 
     setActiveCard(card);
     setIsCardModalOpen(true);
+  };
+
+  const handleEditCard = (card: TaskType) => {
+    if (!card) return;
+
+    setActiveCard(card);
+    setIsCardManagementModalOpen(true);
   };
 
   const handleDeleteCard = async (card: TaskType) => {
@@ -54,7 +62,6 @@ export default function BoardCardList({
       {(list ?? []).map((card, _) => (
         <ListboxItem
           key={card.id}
-          textValue={card.title}
           className="h-[104px]"
           onPress={() => handleOpenCard(card)}
         >
@@ -80,13 +87,15 @@ export default function BoardCardList({
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Static Actions">
-                  <DropdownItem key="edit">Edit file</DropdownItem>
+                  <DropdownItem key="edit" onPress={() => handleEditCard(card)}>
+                    Edit file
+                  </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </div>
             <div className="flex gap-4 items-center">
               <span className="overflow-hidden flex-1 whitespace-nowrap text-ellipsis">
-                {dayjs(card.expired_at).format('YYYY/MM/DD HH:mm')}
+                {dayjs(card.expired_at).format('YYYY/MM/DD')}
               </span>
               <Button
                 isIconOnly

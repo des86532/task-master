@@ -20,7 +20,7 @@ export default function CardGroupModal() {
     isCardGroupModalOpen,
     setIsCardGroupModalOpen,
     cardModalStatus,
-    updateCard,
+    updateCards,
   } = useCard();
   const [selectedCardList, setSelectedCardList] = useState<TaskType[]>([]);
 
@@ -44,7 +44,7 @@ export default function CardGroupModal() {
         selectedCardList.map((item) => item.id),
         { status: cardModalStatus }
       );
-      updateCard();
+      updateCards();
       setIsCardGroupModalOpen(false);
       clearSelectedCardList();
     } catch (error) {
@@ -66,9 +66,9 @@ export default function CardGroupModal() {
   };
 
   useEffect(() => {
-    if (isCardGroupModalOpen) {
-      fetchData();
-    }
+    if (!isCardGroupModalOpen) return;
+
+    fetchData();
   }, [isCardGroupModalOpen]);
 
   return (
