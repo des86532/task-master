@@ -8,7 +8,7 @@ import { Suspense, useState } from 'react';
 import { TaskType, TaskStatus } from '@task-master/shared';
 
 export default function Board() {
-  const { setIsCardGroupModalOpen, setCardModalStatus, cardList, updateCard } =
+  const { setIsCardGroupModalOpen, setCardModalStatus, cardList, updateCards } =
     useCard();
   const { isMobile } = useApp();
 
@@ -30,7 +30,7 @@ export default function Board() {
       try {
         await deleteTask(card.id);
         console.log('刪除成功');
-        updateCard();
+        updateCards();
       } catch (error) {
         console.log('刪除失敗', error);
       }

@@ -6,7 +6,7 @@ import { useCard } from '@/context/CardContext';
 export default function FloatingIcons() {
   const [isOpen, setIsOpen] = useState(false);
   const [count, setCount] = useState(3);
-  const { setIsNewCardModalOpen } = useCard();
+  const { setIsCardManagementModalOpen } = useCard();
 
   return (
     <div className="hidden fixed right-4 top-1/2 z-10 flex-col items-center rounded-full -translate-y-1/2 md:flex">
@@ -22,7 +22,7 @@ export default function FloatingIcons() {
           size="md"
           aria-label="Like"
           className="flex-shrink-0"
-          onPress={() => setIsNewCardModalOpen(true)}
+          onPress={() => setIsCardManagementModalOpen(true)}
         >
           <Image
             src="/icons/plus.svg"
@@ -37,7 +37,7 @@ export default function FloatingIcons() {
           size="md"
           aria-label="Like"
           className="flex-shrink-0"
-          onPress={() => setIsNewCardModalOpen(true)}
+          onPress={() => setIsCardManagementModalOpen(true)}
         >
           <Image
             src="/icons/plus.svg"
@@ -52,7 +52,7 @@ export default function FloatingIcons() {
           size="md"
           aria-label="Like"
           className="flex-shrink-0"
-          onPress={() => setIsNewCardModalOpen(true)}
+          onPress={() => setIsCardManagementModalOpen(true)}
         >
           <Image
             src="/icons/plus.svg"

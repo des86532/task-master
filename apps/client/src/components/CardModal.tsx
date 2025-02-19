@@ -7,16 +7,31 @@ import {
   ModalFooter,
 } from '@heroui/react';
 import { useCard } from '@/context/CardContext';
+import { useEffect } from 'react';
 
 export default function CardModal() {
-  const { isCardModalOpen, setIsCardModalOpen, activeCard } = useCard();
+  const { isCardModalOpen, setIsCardModalOpen, activeCard, setActiveCard } =
+    useCard();
 
   const onOpenChange = () => {
     setIsCardModalOpen(!isCardModalOpen);
   };
 
+  const handleModalClose = () => {
+    setActiveCard(null);
+  };
+
+  useEffect(() => {
+    if (!isCardModalOpen) return;
+  }, [isCardModalOpen]);
+
   return (
-    <Modal isOpen={isCardModalOpen} backdrop="blur" onOpenChange={onOpenChange}>
+    <Modal
+      isOpen={isCardModalOpen}
+      backdrop="blur"
+      onOpenChange={onOpenChange}
+      onClose={handleModalClose}
+    >
       <ModalContent>
         {(onClose) => (
           <>
