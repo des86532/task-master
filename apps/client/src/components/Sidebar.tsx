@@ -55,6 +55,14 @@ export default function SidebarButton() {
           <li>
             <Link
               className="block py-4 text-lg cursor-pointer hover:text-blue-300"
+              href="/chat"
+            >
+              Chat
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="block py-4 text-lg cursor-pointer hover:text-blue-300"
               href="/setting"
             >
               Setting

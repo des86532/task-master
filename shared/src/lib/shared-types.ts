@@ -15,3 +15,10 @@ export type TaskType = {
   updated_at: string;
   expired_at: string;
 };
+
+export interface ChatMessage {
+  id?: string;
+  role: string;
+  content: string;
+  timestamp: number;
+}
