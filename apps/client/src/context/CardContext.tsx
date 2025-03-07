@@ -26,7 +26,7 @@ export const CardContext = createContext<CardContextType>({
   setIsCardGroupModalOpen: () => {
     throw new Error('setIsCardGroupModalOpen function must be overridden');
   },
-  cardModalStatus: TaskStatus.TODO,
+  cardModalStatus: TaskStatus.PENDING,
   setCardModalStatus: () => {
     throw new Error('setCardModalStatus function must be overridden');
   },

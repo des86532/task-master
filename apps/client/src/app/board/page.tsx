@@ -12,7 +12,7 @@ export default function Board() {
     useCard();
   const { isMobile } = useApp();
 
-  const [status, setStatus] = useState(TaskStatus.TODO);
+  const [status, setStatus] = useState(TaskStatus.PENDING);
 
   const filteredCardListByStatus = (status: TaskStatus) => {
     return cardList?.filter((card) => card.status === status) ?? [];
@@ -58,8 +58,8 @@ export default function Board() {
               <SelectItem value={TaskStatus.PROGRESS} key={TaskStatus.PROGRESS}>
                 {TaskStatus.PROGRESS}
               </SelectItem>
-              <SelectItem value={TaskStatus.TODO} key={TaskStatus.TODO}>
-                {TaskStatus.TODO}
+              <SelectItem value={TaskStatus.PENDING} key={TaskStatus.PENDING}>
+                {TaskStatus.PENDING}
               </SelectItem>
               <SelectItem value={TaskStatus.DONE} key={TaskStatus.DONE}>
                 {TaskStatus.DONE}
@@ -68,7 +68,7 @@ export default function Board() {
           </div>
         </div>
         <div className="grid overflow-auto flex-1 grid-cols-1 gap-4 h-full md:grid-cols-3">
-          {(!isMobile || status === TaskStatus.TODO) && (
+          {(!isMobile || status === TaskStatus.PENDING) && (
             <div className="flex overflow-auto flex-col p-4 rounded-lg border">
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold">To Do</h2>
@@ -76,14 +76,14 @@ export default function Board() {
                   size="sm"
                   radius="full"
                   color="primary"
-                  onPress={() => handleAdd(TaskStatus.TODO)}
+                  onPress={() => handleAdd(TaskStatus.PENDING)}
                 >
                   Add
                 </Button>
               </div>
               <Suspense fallback={<div>Loading...</div>}>
                 <BoardCardList
-                  list={filteredCardListByStatus(TaskStatus.TODO)}
+                  list={filteredCardListByStatus(TaskStatus.PENDING)}
                   onDelete={handleDeleteCard}
                 />
               </Suspense>

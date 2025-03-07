@@ -160,7 +160,6 @@ export default function CardManagementModal() {
                   onChange={(e) => handleChange('status', e.target.value)}
                 >
                   <SelectItem key="pending">Pending</SelectItem>
-                  <SelectItem key="todo">Todo</SelectItem>
                   <SelectItem key="progress">Progress</SelectItem>
                   <SelectItem key="done">Done</SelectItem>
                 </Select>
