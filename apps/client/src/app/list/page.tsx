@@ -175,7 +175,7 @@ export default function Page() {
                       : 'default'
                   }
                 >
-                  {TASK_STATUS[item.status].label}
+                  {TASK_STATUS[item.status]?.label}
                 </Chip>
               </TableCell>
               <TableCell>
