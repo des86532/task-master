@@ -8,7 +8,6 @@ import {
 } from '@heroui/react';
 import { useCard } from '@/context/CardContext';
 import { useEffect } from 'react';
-import { deleteTask } from '@/app/_api/task';
 
 export default function CardModal() {
   const {
@@ -16,34 +15,12 @@ export default function CardModal() {
     setIsCardModalOpen,
     activeCard,
     setActiveCard,
-    setIsCardManagementModalOpen,
-    updateCards,
+    handleOpenEditCardModal,
+    handleDeleteCard,
   } = useCard();
 
   const onOpenChange = () => {
     setIsCardModalOpen(!isCardModalOpen);
-  };
-
-  const handleModalClose = () => {
-    setActiveCard(null);
-  };
-
-  const handleCardEdit = () => {
-    setIsCardManagementModalOpen(true);
-  };
-
-  const handleCardDelete = async () => {
-    if (!activeCard) return;
-
-    if (window.confirm('Are you sure you want to delete this card?')) {
-      try {
-        await deleteTask(activeCard.id);
-        alert('刪除卡片成功');
-        updateCards();
-      } catch (error) {
-        alert('刪除卡片失敗');
-      }
-    }
   };
 
   useEffect(() => {
@@ -55,7 +32,7 @@ export default function CardModal() {
       isOpen={isCardModalOpen}
       backdrop="blur"
       onOpenChange={onOpenChange}
-      onClose={handleModalClose}
+      onClose={() => setActiveCard(null)}
     >
       <ModalContent>
         {(onClose) => (
@@ -67,10 +44,17 @@ export default function CardModal() {
               <p>{activeCard ? activeCard.description : 'No card selected'}</p>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="light" onPress={handleCardDelete}>
+              <Button
+                color="danger"
+                variant="light"
+                onPress={() => handleDeleteCard(activeCard)}
+              >
                 Delete
               </Button>
-              <Button color="primary" onPress={handleCardEdit}>
+              <Button
+                color="primary"
+                onPress={() => handleOpenEditCardModal(activeCard)}
+              >
                 Edit
               </Button>
             </ModalFooter>

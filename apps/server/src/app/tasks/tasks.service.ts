@@ -10,8 +10,26 @@ export class TasksService {
     private tasksRepository: Repository<Task>
   ) {}
 
-  findAll(filter: any): Promise<Task[]> {
-    return this.tasksRepository.find({ where: filter, order: { id: 'ASC' } });
+  async findAll(filter: any): Promise<Task[]> {
+    const tasks = await this.tasksRepository.find({
+      where: filter,
+      order: { id: 'ASC' },
+    });
+
+    const currentDate = new Date();
+    return tasks.map((task) => {
+      const expiredAt = new Date(task.expired_at);
+      const isExpired = expiredAt < currentDate;
+      const willExpireInThreeDays =
+        expiredAt.getTime() - currentDate.getTime() <=
+          3 * 24 * 60 * 60 * 1000 && !isExpired;
+
+      return {
+        ...task,
+        willExpireInThreeDays,
+        isExpired,
+      };
+    });
   }
 
   findOne(id: number): Promise<Task> {

@@ -12,16 +12,11 @@ import {
 import { useCard } from '@/context/CardContext';
 import Card from '@/components/Card';
 import { TaskType } from '@task-master/shared';
-import { getAllTask, patchManyTask } from '@/app/_api/task';
+import { getAllTask } from '@/app/_api/task';
 
 export default function CardGroupModal() {
   const [cardList, setCardList] = useState<TaskType[]>([]);
-  const {
-    isCardGroupModalOpen,
-    setIsCardGroupModalOpen,
-    cardModalStatus,
-    updateCards,
-  } = useCard();
+  const { isCardGroupModalOpen, setIsCardGroupModalOpen } = useCard();
   const [selectedCardList, setSelectedCardList] = useState<TaskType[]>([]);
 
   const handleToggleSelect = (card: TaskType) => {
@@ -39,17 +34,7 @@ export default function CardGroupModal() {
   };
 
   const handleAdd = async () => {
-    try {
-      await patchManyTask(
-        selectedCardList.map((item) => item.id),
-        { status: cardModalStatus }
-      );
-      updateCards();
-      setIsCardGroupModalOpen(false);
-      clearSelectedCardList();
-    } catch (error) {
-      console.log('error', error);
-    }
+    console.log('handleAdd');
   };
 
   const clearSelectedCardList = () => {

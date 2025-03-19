@@ -16,5 +16,22 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [heroui()],
+  plugins: [
+    heroui({
+      themes: {
+        light: {
+          extend: 'light',
+          colors: {
+            default: {
+              100: '#E8EEF2',
+              500: '#687EA0',
+            },
+            custom: {
+              DEFAULT: '#DDE6EE',
+            },
+          },
+        },
+      },
+    }),
+  ],
 };

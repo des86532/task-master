@@ -18,36 +18,25 @@ import {
   CalendarDate,
   toCalendarDate,
 } from '@internationalized/date';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { createTask, patchTask } from '@/app/_api/task';
 import { TaskStatus } from '@task-master/shared';
 import { useCard } from '@/context/CardContext';
+import { TASK_STATUS } from '@/constants/status';
+import { initialFormData, FormData } from '@/constants/form';
 
 export default function CardManagementModal() {
   const {
+    setIsCardModalOpen,
     isCardManagementModalOpen,
     setIsCardManagementModalOpen,
     updateCards,
-    setActiveCard,
     activeCard,
-    cardList,
+    defaultExpiredDate,
   } = useCard();
 
-  type FormData = {
-    title: string;
-    priority: number;
-    status: TaskStatus;
-    expired_at: CalendarDate;
-    description: string;
-  };
-
-  const [formData, setFormData] = useState<FormData>({
-    title: '',
-    priority: 0,
-    status: TaskStatus.PENDING,
-    expired_at: today(getLocalTimeZone()),
-    description: '',
-  });
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (
     key: keyof FormData,
@@ -66,13 +55,31 @@ export default function CardManagementModal() {
     handleChange('expired_at', date ?? today(getLocalTimeZone()));
   };
 
+  const clearForm = useCallback(() => {
+    const dateToCalendarDate = (date: Date): CalendarDate => {
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1; // Months are 0-indexed in JavaScript
+      const day = date.getDate();
+
+      return new CalendarDate(year, month, day);
+    };
+
+    const updatedFormData = {
+      ...initialFormData,
+      expired_at: dateToCalendarDate(defaultExpiredDate),
+    };
+    setFormData(updatedFormData);
+  }, [defaultExpiredDate]);
+
   // 新增/更新卡片
   const handleSubmit = async () => {
+    if (!formData.title) {
+      alert('Title is required');
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
-      if (!formData.title) {
-        alert('Title is required');
-        return;
-      }
       const payload = {
         ...formData,
         expired_at: new Date(
@@ -91,33 +98,32 @@ export default function CardManagementModal() {
       }
       updateCards();
       onOpenChange();
+      setIsCardModalOpen(false);
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred while saving the task.'); // 顯示錯誤訊息
+      alert('An error occurred while saving the task.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const memoizedActiveCard = useMemo(() => {
-    return cardList?.find((card) => card.id === activeCard?.id) || null;
-  }, [cardList, activeCard?.id]);
-
   useEffect(() => {
-    setActiveCard(memoizedActiveCard);
-  }, [memoizedActiveCard, setActiveCard]);
+    if (!isCardManagementModalOpen) return;
 
-  useEffect(() => {
-    if (!isCardManagementModalOpen || !activeCard) return;
+    clearForm();
 
-    setFormData({
-      title: activeCard.title,
-      priority: activeCard.priority,
-      status: activeCard.status,
-      expired_at: toCalendarDate(
-        parseAbsolute(activeCard.expired_at, getLocalTimeZone())
-      ),
-      description: activeCard.description,
-    });
-  }, [isCardManagementModalOpen, activeCard]);
+    if (activeCard) {
+      setFormData({
+        title: activeCard.title,
+        priority: activeCard.priority,
+        status: activeCard.status,
+        expired_at: toCalendarDate(
+          parseAbsolute(activeCard.expired_at, getLocalTimeZone())
+        ),
+        description: activeCard.description,
+      });
+    }
+  }, [isCardManagementModalOpen, activeCard, clearForm]);
 
   return (
     <Modal
@@ -157,12 +163,13 @@ export default function CardManagementModal() {
                   className="max-w-xs"
                   size="sm"
                   selectedKeys={[formData.status]}
-                  onChange={(e) => handleChange('status', e.target.value)}
+                  onChange={(e) =>
+                    handleChange('status', e.target.value as TaskStatus)
+                  }
                 >
-                  <SelectItem key="pending">Pending</SelectItem>
-                  <SelectItem key="todo">Todo</SelectItem>
-                  <SelectItem key="progress">Progress</SelectItem>
-                  <SelectItem key="done">Done</SelectItem>
+                  {Object.values(TASK_STATUS).map((item) => (
+                    <SelectItem key={item.key}>{item.label}</SelectItem>
+                  ))}
                 </Select>
               </div>
               <DatePicker
@@ -192,7 +199,11 @@ export default function CardManagementModal() {
               <Button color="danger" variant="light" onPress={onClose}>
                 Close
               </Button>
-              <Button color="primary" onPress={handleSubmit}>
+              <Button
+                color="primary"
+                onPress={handleSubmit}
+                disabled={isSubmitting}
+              >
                 {activeCard ? 'Confirm' : 'Add'}
               </Button>
             </ModalFooter>

@@ -1,6 +1,5 @@
 export enum TaskStatus {
   PENDING = 'pending',
-  TODO = 'todo',
   PROGRESS = 'progress',
   DONE = 'done',
 }
@@ -14,6 +13,8 @@ export type TaskType = {
   created_at: string;
   updated_at: string;
   expired_at: string;
+  willExpireInThreeDays: boolean;
+  isExpired: boolean;
 };
 
 export interface ChatMessage {

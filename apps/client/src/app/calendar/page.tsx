@@ -1,7 +1,7 @@
 'use client';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { useCard } from '@/context/CardContext';
 import { useEffect, useState } from 'react';
 import { patchTask } from '@/app/_api/task';
@@ -15,8 +15,13 @@ type CalendarEvent = Omit<TaskType, 'id'> & {
 };
 
 export default function Page() {
-  const { cardList, setActiveCard, setIsCardModalOpen, updateCards } =
-    useCard();
+  const {
+    cardList,
+    setActiveCard,
+    setIsCardModalOpen,
+    updateCards,
+    handleOpenNewCardModal,
+  } = useCard();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
 
   // 更新卡片
@@ -42,6 +47,10 @@ export default function Page() {
     const card = cardList?.find((card) => card.id === Number(event.id));
     setActiveCard(card || null);
     setIsCardModalOpen(true);
+  };
+
+  const handleDateClick = (info: DateClickArg) => {
+    handleOpenNewCardModal(info.date);
   };
 
   // 初始化日曆資料
@@ -75,6 +84,7 @@ export default function Page() {
         events={events}
         eventChange={handleCardPatch}
         eventClick={handleCardClick}
+        dateClick={handleDateClick}
       />
     </div>
   );

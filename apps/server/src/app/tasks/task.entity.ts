@@ -27,7 +27,6 @@ export class Task {
   @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
-    // insert: false,
   })
   created_at: string;
 
@@ -35,7 +34,18 @@ export class Task {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
-    // insert: false,
   })
   updated_at: string;
+
+  @Column({
+    type: 'boolean',
+    nullable: true,
+  })
+  willExpireInThreeDays: boolean;
+
+  @Column({
+    type: 'boolean',
+    nullable: true,
+  })
+  isExpired: boolean;
 }

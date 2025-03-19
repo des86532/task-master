@@ -59,36 +59,39 @@ export default function Chat() {
   }, [messages]);
 
   return (
-    <div className="p-8 h-full">
-      <div
-        ref={chatroomRef}
-        className="overflow-y-auto p-2 max-h-[calc(100%-40px)] min-h-80 rounded-md border scrollbar-hide"
-      >
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`mb-4 ${
-              msg.role === 'user' ? 'text-right' : 'text-left'
-            }`}
-          >
-            <div className="inline-flex px-2 py-1 bg-gray-200 rounded-md">
-              {msg.content}
+    <div className="flex flex-col">
+      <h2 className="text-4xl font-bold mb-5">Chat</h2>
+      <div className="h-full">
+        <div
+          ref={chatroomRef}
+          className="overflow-y-auto p-2 max-h-[calc(100%-40px)] min-h-80 rounded-md border scrollbar-hide"
+        >
+          {messages.map((msg) => (
+            <div
+              key={msg.id}
+              className={`mb-4 ${
+                msg.role === 'user' ? 'text-right' : 'text-left'
+              }`}
+            >
+              <div className="inline-flex px-2 py-1 bg-gray-200 rounded-md">
+                {msg.content}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-      <div className="flex mt-4">
-        <Input
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="輸入訊息..."
-        />
-        <Button onPress={sendMessage} isLoading={isLoading} className="ml-2">
-          發送
-        </Button>
-        <Button onPress={clearMessages} className="ml-2" color="danger">
-          清除對話
-        </Button>
+          ))}
+        </div>
+        <div className="flex mt-4">
+          <Input
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="輸入訊息..."
+          />
+          <Button onPress={sendMessage} isLoading={isLoading} className="ml-2">
+            發送
+          </Button>
+          <Button onPress={clearMessages} className="ml-2" color="danger">
+            清除對話
+          </Button>
+        </div>
       </div>
     </div>
   );

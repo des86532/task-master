@@ -3,13 +3,11 @@
 import './global.css';
 import { HeroUIProvider } from '@heroui/react';
 import Sidebar from '@/components/Sidebar';
-import Footer from '@/components/Footer';
 import { AppProvideer } from '@/context/AppContext';
 import { CardProvider } from '@/context/CardContext';
 import CardGroupModal from '@/components/CardGroupModal';
 import CardModal from '@/components/CardModal';
 import CardManagementModal from '@/components/CardManagementModal';
-import FloatingIcons from '@/components/FloatingIcons';
 
 export default function RootLayout({
   children,
@@ -22,18 +20,15 @@ export default function RootLayout({
         <HeroUIProvider>
           <AppProvideer>
             <CardProvider>
-              <div className="flex flex-col h-screen">
-                <Sidebar />
-                <div className="overflow-auto flex-1 w-full">
-                  <div className="mx-auto max-w-[1320px] h-full overflow-y-auto scrollbar-hide">
-                    {children}
-                  </div>
+              <div className="flex flex-col h-screen bg-custom p-8">
+                <div className="flex flex-1 mx-auto max-w-[1440px] w-full p-8 bg-white rounded-2xl gap-8">
+                  <Sidebar />
+                  <div className="overflow-auto flex-1 w-full">{children}</div>
                 </div>
-                <Footer />
+
                 <CardGroupModal />
                 <CardModal />
                 <CardManagementModal />
-                <FloatingIcons />
               </div>
             </CardProvider>
           </AppProvideer>
