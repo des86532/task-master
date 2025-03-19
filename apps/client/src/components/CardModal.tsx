@@ -7,7 +7,7 @@ import {
   ModalFooter,
 } from '@heroui/react';
 import { useCard } from '@/context/CardContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function CardModal() {
   const {
@@ -19,8 +19,22 @@ export default function CardModal() {
     handleDeleteCard,
   } = useCard();
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const onOpenChange = () => {
     setIsCardModalOpen(!isCardModalOpen);
+  };
+
+  const handleCardDelete = async () => {
+    try {
+      setIsSubmitting(true);
+      await handleDeleteCard(activeCard);
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while deleting the task.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -47,7 +61,9 @@ export default function CardModal() {
               <Button
                 color="danger"
                 variant="light"
-                onPress={() => handleDeleteCard(activeCard)}
+                onPress={handleCardDelete}
+                isDisabled={isSubmitting}
+                isLoading={isSubmitting}
               >
                 Delete
               </Button>

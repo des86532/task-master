@@ -63,7 +63,10 @@ export default function Page() {
       <div>
         <div className="flex justify-between">
           <h2 className="text-4xl font-bold mb-5">All Tasks</h2>
-          <Button color="primary" onPress={() => handleOpenNewCardModal}>
+          <Button
+            color="primary"
+            onPress={() => handleOpenNewCardModal(new Date())}
+          >
             New Task
           </Button>
         </div>

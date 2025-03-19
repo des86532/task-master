@@ -88,7 +88,7 @@ export const CardProvider = ({ children }: { children: React.ReactNode }) => {
     setIsCardModalOpen(true);
   };
 
-  const handleOpenNewCardModal = (date: Date = new Date()) => {
+  const handleOpenNewCardModal = (date: Date) => {
     if (isCardManagementModalOpen) return;
 
     setDefaultExpiredDate(date);

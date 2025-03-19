@@ -203,6 +203,7 @@ export default function CardManagementModal() {
                 color="primary"
                 onPress={handleSubmit}
                 disabled={isSubmitting}
+                isLoading={isSubmitting}
               >
                 {activeCard ? 'Confirm' : 'Add'}
               </Button>

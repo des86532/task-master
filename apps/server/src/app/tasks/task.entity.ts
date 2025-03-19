@@ -36,16 +36,4 @@ export class Task {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updated_at: string;
-
-  @Column({
-    type: 'boolean',
-    nullable: true,
-  })
-  willExpireInThreeDays: boolean;
-
-  @Column({
-    type: 'boolean',
-    nullable: true,
-  })
-  isExpired: boolean;
 }
