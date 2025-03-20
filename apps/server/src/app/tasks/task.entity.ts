@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { SubTask } from './sub-task.entity';
 
 @Entity('tasks')
 export class Task {
@@ -16,6 +17,9 @@ export class Task {
 
   @Column()
   priority: number;
+
+  @OneToMany(() => SubTask, (subTask) => subTask.task, { cascade: true })
+  subTasks: SubTask[];
 
   @Column({
     type: 'timestamp',

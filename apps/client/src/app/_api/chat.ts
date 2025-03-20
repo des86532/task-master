@@ -17,3 +17,20 @@ export const postChatMessage = async (messages: ChatMessage[]) => {
 
   return response.json();
 };
+
+// 生成子任務
+export const generateSubTasks = async (description: string) => {
+  const response = await fetch(`${API_BASE_URL}/api/chat/generate-subtasks`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ description }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to generate subtasks');
+  }
+
+  return response.json();
+};

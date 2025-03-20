@@ -6,6 +6,7 @@ import { ChatModule } from './chat/chat.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Task } from './tasks/task.entity';
+import { SubTask } from './tasks/sub-task.entity';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { Task } from './tasks/task.entity';
         process.env.NODE_ENV == 'production'
           ? process.env.DATABASE_URL
           : 'postgres://postgres:postgres@localhost:5432/task_master',
-      entities: [Task],
+      entities: [Task, SubTask],
       synchronize: process.env.NODE_ENV !== 'production',
     }),
     TasksModule,

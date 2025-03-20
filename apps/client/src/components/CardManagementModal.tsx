@@ -10,6 +10,8 @@ import {
   Select,
   SelectItem,
   DatePicker,
+  CheckboxGroup,
+  Checkbox,
 } from '@heroui/react';
 import {
   getLocalTimeZone,
@@ -18,12 +20,14 @@ import {
   CalendarDate,
   toCalendarDate,
 } from '@internationalized/date';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { createTask, patchTask } from '@/app/_api/task';
+import { generateSubTasks } from '@/app/_api/chat';
 import { TaskStatus } from '@task-master/shared';
 import { useCard } from '@/context/CardContext';
 import { TASK_STATUS } from '@/constants/status';
 import { initialFormData, FormData } from '@/constants/form';
+import { IconStars, IconTrash } from '@/icons';
 
 export default function CardManagementModal() {
   const {
@@ -36,7 +40,10 @@ export default function CardManagementModal() {
   } = useCard();
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [generateError, setGenerateError] = useState<string | null>(null);
+  const [inputValue, setInputValue] = useState<string>('');
 
   const handleChange = (
     key: keyof FormData,
@@ -44,6 +51,16 @@ export default function CardManagementModal() {
   ) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
+
+  // 已完成的sub task index list
+  const subTaskSelected = useMemo(() => {
+    return formData.subTasks.map((item, index) => {
+      if (item.status) {
+        return String(index);
+      }
+      return '-1';
+    });
+  }, [formData]);
 
   // modal 開關
   const onOpenChange = () => {
@@ -55,6 +72,7 @@ export default function CardManagementModal() {
     handleChange('expired_at', date ?? today(getLocalTimeZone()));
   };
 
+  // 清除表單
   const clearForm = useCallback(() => {
     const dateToCalendarDate = (date: Date): CalendarDate => {
       const year = date.getFullYear();
@@ -107,6 +125,73 @@ export default function CardManagementModal() {
     }
   };
 
+  //建議子任務
+  const suggestSubTasks = async () => {
+    setIsGenerating(true);
+    try {
+      const response = await generateSubTasks(formData.description);
+
+      if (!response.choices?.[0]?.message?.content) {
+        throw new Error('Invalid response format from server');
+      }
+
+      const result = JSON.parse(response.choices?.[0]?.message?.content);
+
+      if (result.error) {
+        setGenerateError(result.error);
+      }
+
+      if (result.tasks.length > 0) {
+        setFormData({
+          ...formData,
+          subTasks: result.tasks.map((item: string) => ({
+            title: item,
+            status: false,
+          })),
+        });
+        setGenerateError(null);
+      }
+    } catch (error) {
+      console.error('Error generating subtasks:', error);
+      alert('An error occurred while generating subtasks.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  // 處理子任務狀態
+  const handleCheckbox = (values: string[]) => {
+    setFormData({
+      ...formData,
+      subTasks: formData.subTasks.map((item, index) => ({
+        ...item,
+        status: values.includes(String(index)),
+      })),
+    });
+  };
+
+  // 手動新增子任務
+  const handleAddSubTask = (task: string) => {
+    setFormData({
+      ...formData,
+      subTasks: [
+        ...formData.subTasks,
+        {
+          title: task,
+          status: false,
+        },
+      ],
+    });
+  };
+
+  // 刪除子任務
+  const handleRemoveSubTask = (index: number) => {
+    setFormData({
+      ...formData,
+      subTasks: formData.subTasks.filter((_, i) => i !== index),
+    });
+  };
+
   useEffect(() => {
     if (!isCardManagementModalOpen) return;
 
@@ -117,6 +202,7 @@ export default function CardManagementModal() {
         title: activeCard.title,
         priority: activeCard.priority,
         status: activeCard.status,
+        subTasks: activeCard.subTasks,
         expired_at: toCalendarDate(
           parseAbsolute(activeCard.expired_at, getLocalTimeZone())
         ),
@@ -194,19 +280,74 @@ export default function CardManagementModal() {
                 value={formData.description}
                 onChange={(e) => handleChange('description', e.target.value)}
               />
+              <Input
+                className="w-full"
+                color="default"
+                label="Sub Tasks"
+                placeholder="Enter your Tasks"
+                type="text"
+                endContent={
+                  <Button
+                    size="sm"
+                    color="primary"
+                    onPress={() => {
+                      if (inputValue) {
+                        handleAddSubTask(inputValue);
+                        setInputValue('');
+                      }
+                    }}
+                  >
+                    Add
+                  </Button>
+                }
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+              />
+              <CheckboxGroup onChange={handleCheckbox} value={subTaskSelected}>
+                {formData.subTasks.map((item, index) => (
+                  <div
+                    className="flex gap-4 justify-between pr-4 items-center"
+                    key={index}
+                  >
+                    <Checkbox value={String(index)} lineThrough={item.status}>
+                      {item.title}
+                    </Checkbox>
+                    <IconTrash
+                      className="text-danger"
+                      onClick={() => handleRemoveSubTask(index)}
+                    ></IconTrash>
+                  </div>
+                ))}
+              </CheckboxGroup>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
-                Close
-              </Button>
-              <Button
-                color="primary"
-                onPress={handleSubmit}
-                disabled={isSubmitting}
-                isLoading={isSubmitting}
-              >
-                {activeCard ? 'Confirm' : 'Add'}
-              </Button>
+              <div className="flex justify-between w-full items-center">
+                <div>
+                  <Button
+                    color={generateError ? 'danger' : 'success'}
+                    className="text-white"
+                    startContent={isGenerating ? '' : <IconStars />}
+                    onPress={suggestSubTasks}
+                    isLoading={isGenerating}
+                    isDisabled={isGenerating}
+                  >
+                    {generateError ?? 'Auto-Generate SubTasks'}
+                  </Button>
+                </div>
+                <div>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                  <Button
+                    color="primary"
+                    onPress={handleSubmit}
+                    disabled={isSubmitting}
+                    isLoading={isSubmitting}
+                  >
+                    {activeCard ? 'Confirm' : 'Add'}
+                  </Button>
+                </div>
+              </div>
             </ModalFooter>
           </>
         )}

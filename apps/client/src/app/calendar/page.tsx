@@ -55,9 +55,10 @@ export default function Page() {
 
   // 初始化日曆資料
   useEffect(() => {
-    if (!cardList) return;
+    const cards = Array.isArray(cardList) ? cardList : [];
+
     setEvents(
-      cardList.map((card) => ({
+      cards.map((card) => ({
         ...card,
         id: String(card.id),
         start: card.expired_at,

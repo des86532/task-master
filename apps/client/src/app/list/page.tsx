@@ -16,13 +16,20 @@ import {
   Chip,
 } from '@heroui/react';
 import dayjs from 'dayjs';
-import { TaskStatus } from '@task-master/shared';
+import { TaskStatus, SubTaskType } from '@task-master/shared';
 import {
   TASK_STATUS_TAB_OPTIONS,
   TabKey,
   TASK_STATUS,
 } from '@/constants/status';
-import { IconTrash, IconEdit, IconEye, IconAlert, IconClock } from '@/icons';
+import {
+  IconTrash,
+  IconEdit,
+  IconEye,
+  IconAlert,
+  IconClock,
+  IconCheckCircle,
+} from '@/icons';
 
 const tableHeader = [
   { key: 'Task', label: 'Task', width: 300, minWidth: 150 },
@@ -36,7 +43,6 @@ const tableHeader = [
 export default function Page() {
   const {
     cardList,
-    cardError: error,
     cardLoading: isLoading,
     handleOpenCardModal,
     handleOpenNewCardModal,
@@ -53,10 +59,17 @@ export default function Page() {
   };
 
   const filteredData = useMemo(() => {
-    if (selected === 'all') return cardList || [];
+    const cards = Array.isArray(cardList) ? cardList : [];
+    if (selected === 'all') return cards;
 
-    return cardList?.filter((item) => item.status === selected) || [];
+    return cards.filter((item) => item.status === selected);
   }, [cardList, selected]);
+
+  const computedPercentage = (list: SubTaskType[]) => {
+    if (!Array.isArray(list) || list.length === 0) return 0;
+
+    return (list.filter((item) => item.status).length / list.length) * 100;
+  };
 
   return (
     <div className="flex flex-col gap-8">
@@ -134,18 +147,10 @@ export default function Page() {
               </TableCell>
               <TableCell>
                 <div className="flex gap-4">
-                  <span
-                    className={
-                      item.isExpired
-                        ? 'text-danger'
-                        : item.willExpireInThreeDays
-                        ? 'text-warning'
-                        : ''
-                    }
-                  >
-                    {dayjs(item.expired_at).format('YYYY/MM/DD')}
-                  </span>
-                  {item.isExpired ? (
+                  <span>{dayjs(item.expired_at).format('YYYY/MM/DD')}</span>
+                  {item.status === TaskStatus.DONE ? (
+                    <IconCheckCircle className="w-5 h-5 text-success"></IconCheckCircle>
+                  ) : item.isExpired ? (
                     <IconAlert className="w-5 h-5 text-danger"></IconAlert>
                   ) : (
                     item.willExpireInThreeDays && (
@@ -160,7 +165,7 @@ export default function Page() {
                     aria-label="Loading..."
                     size="sm"
                     showValueLabel={true}
-                    value={30}
+                    value={computedPercentage(item.subTasks)}
                   />
                 </div>
               </TableCell>

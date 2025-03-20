@@ -10,11 +10,20 @@ export type TaskType = {
   description: string;
   status: TaskStatus;
   priority: number;
+  subTasks: SubTaskType[];
   created_at: string;
   updated_at: string;
   expired_at: string;
   willExpireInThreeDays: boolean;
   isExpired: boolean;
+};
+
+export type SubTaskType = {
+  id?: number;
+  title: string;
+  status: boolean;
+  created_at?: string;
+  updated_at?: string;
 };
 
 export interface ChatMessage {

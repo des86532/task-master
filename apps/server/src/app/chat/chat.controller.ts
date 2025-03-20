@@ -15,4 +15,14 @@ export class ChatController {
     const response = await this.chatService.sendMessage(messages);
     return response;
   }
+
+  @Post('generate-subtasks')
+  async generateSubTasks(@Body('description') description: string) {
+    if (!description) {
+      return { error: '請提供描述' };
+    }
+
+    const response = await this.chatService.generateSubTasks(description);
+    return response;
+  }
 }

@@ -12,6 +12,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2021-10-10',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 2,
@@ -24,6 +25,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2021-10-10',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 3,
@@ -36,6 +38,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2021-10-10',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 4,
@@ -48,6 +51,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2021-10-10',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 5,
@@ -60,6 +64,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2021-10-10',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 6,
@@ -72,6 +77,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2021-10-10',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 7,
@@ -84,6 +90,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2021-10-10',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 8,
@@ -96,6 +103,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2021-10-10',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 9,
@@ -108,6 +116,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-15',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 10,
@@ -120,6 +129,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-15',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 11,
@@ -132,6 +142,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-16',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 12,
@@ -144,6 +155,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-16',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 13,
@@ -156,6 +168,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-17',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 14,
@@ -168,6 +181,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-17',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 15,
@@ -180,6 +194,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-18',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 16,
@@ -192,6 +207,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-18',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 17,
@@ -204,6 +220,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-19',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 18,
@@ -216,6 +233,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-19',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 19,
@@ -228,6 +246,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-20',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 20,
@@ -240,6 +259,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-20',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 21,
@@ -252,6 +272,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-21',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 22,
@@ -264,6 +285,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-21',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 23,
@@ -276,6 +298,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-22',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 24,
@@ -288,6 +311,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-22',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 25,
@@ -300,6 +324,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-23',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 26,
@@ -312,6 +337,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-23',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 27,
@@ -324,6 +350,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-24',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 28,
@@ -336,6 +363,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-24',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 29,
@@ -348,6 +376,7 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-25',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
   {
     id: 30,
@@ -360,5 +389,6 @@ export const cardListData: TaskType[] = [
     expired_at: '2023-07-25',
     willExpireInThreeDays: false,
     isExpired: false,
+    subTasks: [],
   },
 ];
