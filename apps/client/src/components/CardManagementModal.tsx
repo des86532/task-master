@@ -331,7 +331,7 @@ export default function CardManagementModal() {
                     isLoading={isGenerating}
                     isDisabled={isGenerating}
                   >
-                    {generateError ?? 'Auto-Generate SubTasks'}
+                    {generateError ?? 'Auto-Generate'}
                   </Button>
                 </div>
                 <div>

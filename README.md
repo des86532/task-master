@@ -20,38 +20,35 @@ TaskMaster is a full-stack task management application built with modern web tec
 - **Real-time Chat**:
   - AI-powered chat assistant
   - Message history with IndexedDB
-- **Responsive Design**:
-  - Mobile-friendly interface
-  - Adaptive layouts
 
 ## Tech Stack
 
 ### Frontend
 
-- Next.js 14
-- React 18
-- TypeScript
-- Tailwind CSS
-- HeroUI Components
-- SWR for data fetching
-- IndexedDB for local storage
-- FullCalendar for calendar view
+- Next.js 14: Used for building server-side rendered React applications.
+- React 18: Used for building the user interface JavaScript library.
+- TypeScript: Provides static type checking JavaScript superset.
+- Tailwind CSS: Used for rapid building of custom design CSS framework.
+- HeroUI Components: Used for UI component library.
+- SWR: Used for data fetching library.
+- IndexedDB: Used for local storage database.
+- FullCalendar: Used for calendar view library.
 
 ### Backend
 
-- NestJS
-- TypeORM
-- PostgreSQL
-- OpenAI API integration
+- NestJS: A framework for building efficient and scalable server-side applications.
+- TypeORM: An ORM (Object-Relational Mapping) tool for interacting with databases.
+- PostgreSQL: As a database management system.
+- OpenAI API: For generating subtasks with the chat assistant.
 
 ### Development Tools
 
-- Nx Monorepo
-- ESLint
-- Prettier
-- Husky
-- Commitlint
-- GitHub Actions
+- Nx Monorepo: A tool for managing multiple applications and libraries.
+- ESLint: A static code analysis tool for JavaScript and TypeScript.
+- Prettier: A tool for code formatting.
+- Husky: A tool for Git hooks.
+- Commitlint: A tool for checking commit messages.
+- GitHub Actions: A tool for continuous integration and continuous deployment.
 
 ## Installation
 
@@ -79,11 +76,11 @@ CHAT_API_KEY=your_openai_api_key
 4. Start the development servers:
 
 ```bash
-# Start backend
-pnpm nx serve server
-
 # Start frontend
-pnpm nx serve client
+pnpm nx run client:dev
+
+# Start backend
+pnpm nx run server:serve
 ```
 
 ## Project Structure
