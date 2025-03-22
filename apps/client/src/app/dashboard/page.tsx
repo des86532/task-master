@@ -1,5 +1,5 @@
 'use client';
-import { Card } from '@heroui/react';
+import { Card, Spinner } from '@heroui/react';
 import { getTaskStats, getTasksStatsMonthly } from '@/app/_api/task';
 import { useEffect, useState, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 Chart.register(...registerables);
 
 export default function Dashboard() {
+  const [loading, setLoading] = useState(true);
   const [summaryData, setSummaryData] = useState<TaskSummaryType | null>(null);
   const [dataMonthly, setDataMonthly] = useState<MonthTaskStatsType[] | null>(
     null
@@ -18,29 +19,36 @@ export default function Dashboard() {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const [chartInstance, setChartInstance] = useState<Chart | null>(null);
 
+  // 初始化數據
   const init = async () => {
     try {
-      const response = await getTaskStats();
-      setSummaryData(response);
+      setLoading(true);
+      const [summaryResponse, monthlyResponse] = await Promise.all([
+        getTaskStats(),
+        getTasksStatsMonthly(),
+      ]);
+      setSummaryData(summaryResponse);
+      setDataMonthly(monthlyResponse);
     } catch (error) {
-      console.error('Error fetching task stats:', error);
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const initMonthlyStats = async () => {
-    try {
-      const response = await getTasksStatsMonthly();
-      setDataMonthly(response);
-    } catch (error) {
-      console.error('Error fetching monthly task stats:', error);
-    }
-  };
-
+  // 初始化數據和圖表
   useEffect(() => {
     init();
-    initMonthlyStats();
+
+    // 組件卸載時銷毀圖表實例
+    return () => {
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+    };
   }, []);
 
+  // 更新圖表
   useEffect(() => {
     if (chartRef.current && dataMonthly) {
       // 銷毀舊的圖表實例
@@ -117,13 +125,6 @@ export default function Dashboard() {
         setChartInstance(newChartInstance);
       }
     }
-
-    // 組件卸載時銷毀圖表實例
-    return () => {
-      if (chartInstance) {
-        chartInstance.destroy();
-      }
-    };
   }, [dataMonthly]);
 
   const data = [
@@ -150,9 +151,9 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-full">
       <h2 className="text-4xl font-bold mb-5">Dashboard</h2>
-      <div className="px-2 flex flex-col gap-4">
+      <div className="px-2 flex flex-col gap-4 flex-1">
         <div className="flex gap-4">
           {data.map((item, index) => (
             <Card
@@ -165,16 +166,20 @@ export default function Dashboard() {
                     {item.title}
                   </dt>
                   <dd className="text-2xl font-semibold text-default-700">
-                    {item.value}
+                    {loading ? <Spinner size="sm" /> : item.value}
                   </dd>
                 </div>
               </div>
             </Card>
           ))}
         </div>
-        <Card>
-          <div className="p-4">
-            <canvas ref={chartRef}></canvas>
+        <Card className="flex-1 flex justify-center items-center">
+          <div className="p-4 flex justify-center items-center w-full h-full">
+            {loading ? (
+              <Spinner size="lg" />
+            ) : (
+              <canvas ref={chartRef} style={{ width: '100%' }}></canvas>
+            )}
           </div>
         </Card>
       </div>
