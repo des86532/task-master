@@ -3,6 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Task } from './task.entity';
 import { SubTask } from './sub-task.entity';
+import {
+  TaskStatus,
+  MonthTaskStatsType,
+  TaskSummaryType,
+} from '@task-master/shared';
 
 @Injectable()
 export class TasksService {
@@ -153,5 +158,150 @@ export class TasksService {
       Object.assign(item, task);
     });
     return this.tasksRepository.save(tasks);
+  }
+
+  async getTaskStats(): Promise<TaskSummaryType> {
+    try {
+      const [pendingTasks, pendingTotal] =
+        await this.tasksRepository.findAndCount({
+          where: { status: TaskStatus.PENDING },
+        });
+
+      const [progressingTasks, progressingTotal] =
+        await this.tasksRepository.findAndCount({
+          where: { status: TaskStatus.PROGRESS },
+        });
+
+      // 獲取當前時間的起始點
+      const now = new Date();
+      const startOfDay = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+      const startOfWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const startOfMonth = new Date(
+        Date.UTC(now.getFullYear(), now.getMonth(), 1)
+      );
+
+      // 查詢已完成任務的數量，按時間段分類
+      const completedStats = await this.tasksRepository
+        .createQueryBuilder('task')
+        .select([
+          `SUM(CASE WHEN task.updated_at >= :startOfDay THEN 1 ELSE 0 END) as day`,
+          `SUM(CASE WHEN task.updated_at >= :startOfWeek THEN 1 ELSE 0 END) as week`,
+          `SUM(CASE WHEN task.updated_at >= :startOfMonth THEN 1 ELSE 0 END) as month`,
+        ])
+        .where('task.status = :status', { status: TaskStatus.COMPLETED })
+        .andWhere('task.updated_at IS NOT NULL')
+        .setParameters({
+          startOfDay: startOfDay.toISOString(),
+          startOfWeek: startOfWeek.toISOString(),
+          startOfMonth: startOfMonth.toISOString(),
+        })
+        .getRawOne();
+
+      return {
+        pending: pendingTotal,
+        progress: progressingTotal,
+        completed: {
+          day: completedStats?.day ? parseInt(completedStats.day) : 0,
+          week: completedStats?.week ? parseInt(completedStats.week) : 0,
+          month: completedStats?.month ? parseInt(completedStats.month) : 0,
+        },
+      };
+    } catch (error) {
+      console.error('Error getting task stats:', error);
+      throw error;
+    }
+  }
+
+  async getTasksMonthly(): Promise<MonthTaskStatsType[]> {
+    try {
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+      // 查詢每日的任務統計
+      const dailyStats = await this.tasksRepository
+        .createQueryBuilder('task')
+        .select([
+          'DATE(task.updated_at) as date',
+          `SUM(CASE WHEN task.status = :pending THEN 1 ELSE 0 END) as pending`,
+          `SUM(CASE WHEN task.status = :progress THEN 1 ELSE 0 END) as progress`,
+          `SUM(CASE WHEN task.status = :completed THEN 1 ELSE 0 END) as completed`,
+        ])
+        .where(
+          'task.updated_at >= :startOfMonth AND task.updated_at <= :endOfMonth',
+          {
+            startOfMonth: startOfMonth.toISOString(),
+            endOfMonth: endOfMonth.toISOString(),
+          }
+        )
+        .setParameters({
+          pending: TaskStatus.PENDING,
+          progress: TaskStatus.PROGRESS,
+          completed: TaskStatus.COMPLETED,
+        })
+        .groupBy('DATE(task.updated_at)')
+        .orderBy('DATE(task.updated_at)', 'ASC')
+        .getRawMany();
+
+      // 將每日數據分組為每七天一組
+      const weeklyStats = this.groupByWeek(
+        dailyStats,
+        startOfMonth,
+        endOfMonth
+      );
+
+      return weeklyStats;
+    } catch (error) {
+      console.error('Error getting monthly task stats:', error);
+      throw error;
+    }
+  }
+
+  // 將每日數據分組為每七天一組
+  private groupByWeek(
+    dailyStats: {
+      date: string;
+      pending: string;
+      progress: string;
+      completed: string;
+    }[],
+    startOfMonth: Date,
+    endOfMonth: Date
+  ): MonthTaskStatsType[] {
+    const weeklyStats: MonthTaskStatsType[] = [];
+    const currentWeekStart = new Date(startOfMonth);
+    const currentWeekEnd = new Date(startOfMonth);
+    currentWeekEnd.setDate(currentWeekEnd.getDate() + 6);
+
+    while (currentWeekStart <= endOfMonth) {
+      const weekStats = dailyStats
+        .filter((stat) => {
+          const date = new Date(stat.date);
+          return date >= currentWeekStart && date <= currentWeekEnd;
+        })
+        .reduce(
+          (acc, stat) => {
+            acc.pending += parseInt(stat.pending) || 0;
+            acc.progress += parseInt(stat.progress) || 0;
+            acc.completed += parseInt(stat.completed) || 0;
+            return acc;
+          },
+          { pending: 0, progress: 0, completed: 0 }
+        );
+
+      weeklyStats.push({
+        startDate: currentWeekStart.toISOString(),
+        endDate: currentWeekEnd.toISOString(),
+        pending: weekStats.pending,
+        progress: weekStats.progress,
+        completed: weekStats.completed,
+      });
+
+      // 移動到下週
+      currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+      currentWeekEnd.setDate(currentWeekEnd.getDate() + 7);
+    }
+
+    return weeklyStats;
   }
 }

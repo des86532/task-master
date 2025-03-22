@@ -1,7 +1,7 @@
 export enum TaskStatus {
   PENDING = 'pending',
   PROGRESS = 'progress',
-  DONE = 'done',
+  COMPLETED = 'completed',
 }
 
 export type TaskType = {
@@ -24,6 +24,24 @@ export type SubTaskType = {
   status: boolean;
   created_at?: string;
   updated_at?: string;
+};
+
+export type TaskSummaryType = {
+  pending: number;
+  progress: number;
+  completed: {
+    day: number;
+    week: number;
+    month: number;
+  };
+};
+
+export type MonthTaskStatsType = {
+  startDate: string;
+  endDate: string;
+  pending: number;
+  progress: number;
+  completed: number;
 };
 
 export interface ChatMessage {

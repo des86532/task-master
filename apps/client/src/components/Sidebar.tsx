@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 export default function Sidebar() {
   const pathname = usePathname();
   const routes = [
+    { name: 'Dashboard', href: '/dashboard' },
     { name: 'List', href: '/list' },
     { name: 'Calendar', href: '/calendar' },
     { name: 'Chat', href: '/chat' },

@@ -10,6 +10,10 @@ export const TASK_API = {
   allTask: () => `${API_BASE_URL}/api/tasks`,
   // 取得單一任務
   oneTask: (id: number) => `${API_BASE_URL}/api/tasks/${id}`,
+  // 任務 summary
+  taskSummary: () => `${API_BASE_URL}/api/tasks/stats`,
+  // 任務每月 summary
+  taskSummaryMonthly: () => `${API_BASE_URL}/api/tasks/stats-monthly`,
 };
 
 // 取得所有任務
@@ -90,6 +94,28 @@ export const patchManyTask = async (ids: number[], task: Partial<TaskType>) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ ids, task }),
+  });
+  return response.json();
+};
+
+// 取得所有任務總結
+export const getTaskStats = async () => {
+  const response = await fetch(TASK_API.taskSummary(), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return response.json();
+};
+
+// 取得每月任務總結
+export const getTasksStatsMonthly = async () => {
+  const response = await fetch(TASK_API.taskSummaryMonthly(), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
   return response.json();
 };

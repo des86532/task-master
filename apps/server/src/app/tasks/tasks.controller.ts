@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { Task } from './task.entity';
+import { MonthTaskStatsType, TaskSummaryType } from '@task-master/shared';
 
 @Controller('tasks')
 export class TasksController {
@@ -19,6 +20,16 @@ export class TasksController {
   @Get()
   findAll(@Query() filter: any): Promise<Task[]> {
     return this.tasksService.findAll(filter);
+  }
+
+  @Get('stats')
+  async getStats(): Promise<TaskSummaryType> {
+    return await this.tasksService.getTaskStats();
+  }
+
+  @Get('stats-monthly')
+  async getTasksStatsMonthly(): Promise<MonthTaskStatsType[]> {
+    return await this.tasksService.getTasksMonthly();
   }
 
   @Get(':id')

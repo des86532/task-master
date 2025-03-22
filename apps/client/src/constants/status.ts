@@ -9,8 +9,8 @@ export const TASK_STATUS = {
     key: TaskStatus.PROGRESS,
     label: 'In Progress',
   },
-  [TaskStatus.DONE]: {
-    key: TaskStatus.DONE,
+  [TaskStatus.COMPLETED]: {
+    key: TaskStatus.COMPLETED,
     label: 'Completed',
   },
 };
@@ -29,8 +29,8 @@ export const TASK_STATUS_TAB_OPTIONS = [
     label: TASK_STATUS[TaskStatus.PROGRESS].label,
   },
   {
-    key: TASK_STATUS[TaskStatus.DONE].key,
-    label: TASK_STATUS[TaskStatus.DONE].label,
+    key: TASK_STATUS[TaskStatus.COMPLETED].key,
+    label: TASK_STATUS[TaskStatus.COMPLETED].label,
   },
 ];
 

@@ -148,7 +148,7 @@ export default function Page() {
               <TableCell>
                 <div className="flex gap-4">
                   <span>{dayjs(item.expired_at).format('YYYY/MM/DD')}</span>
-                  {item.status === TaskStatus.DONE ? (
+                  {item.status === TaskStatus.COMPLETED ? (
                     <IconCheckCircle className="w-5 h-5 text-success"></IconCheckCircle>
                   ) : item.isExpired ? (
                     <IconAlert className="w-5 h-5 text-danger"></IconAlert>
@@ -173,7 +173,7 @@ export default function Page() {
                 <Chip
                   size="lg"
                   color={
-                    item.status === TaskStatus.DONE
+                    item.status === TaskStatus.COMPLETED
                       ? 'success'
                       : item.status === TaskStatus.PROGRESS
                       ? 'primary'
