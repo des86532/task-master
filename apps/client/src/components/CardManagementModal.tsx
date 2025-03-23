@@ -12,6 +12,7 @@ import {
   DatePicker,
   CheckboxGroup,
   Checkbox,
+  Tooltip,
 } from '@heroui/react';
 import {
   getLocalTimeZone,
@@ -127,6 +128,8 @@ export default function CardManagementModal() {
 
   //建議子任務
   const suggestSubTasks = async () => {
+    if (formData.description.trim().length === 0) return;
+
     setIsGenerating(true);
     try {
       const response = await generateSubTasks(formData.description);
@@ -278,7 +281,10 @@ export default function CardManagementModal() {
                 minRows={5}
                 maxRows={10}
                 value={formData.description}
-                onChange={(e) => handleChange('description', e.target.value)}
+                onChange={(e) => {
+                  handleChange('description', e.target.value);
+                  setGenerateError(null);
+                }}
               />
               <Input
                 className="w-full"
@@ -323,16 +329,18 @@ export default function CardManagementModal() {
             <ModalFooter>
               <div className="flex justify-between w-full items-center">
                 <div>
-                  <Button
-                    color={generateError ? 'danger' : 'success'}
-                    className="text-white"
-                    startContent={isGenerating ? '' : <IconStars />}
-                    onPress={suggestSubTasks}
-                    isLoading={isGenerating}
-                    isDisabled={isGenerating}
-                  >
-                    {generateError ?? 'Auto-Generate'}
-                  </Button>
+                  <Tooltip content="Auto-generate based on description">
+                    <Button
+                      color={generateError ? 'danger' : 'success'}
+                      className="text-white"
+                      startContent={isGenerating ? '' : <IconStars />}
+                      onPress={suggestSubTasks}
+                      isLoading={isGenerating}
+                      isDisabled={isGenerating}
+                    >
+                      {generateError ? 'Generation Failed' : 'Auto-Generate'}
+                    </Button>
+                  </Tooltip>
                 </div>
                 <div>
                   <Button color="danger" variant="light" onPress={onClose}>
