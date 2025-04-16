@@ -28,6 +28,7 @@ export class ChatService {
       回傳格式為 JSON: {"tasks": ["任務1", "任務2", ...]}
       如果無法分析，請回傳 JSON: {"tasks": [], "error": "錯誤訊息"}
       錯誤訊息: 請用三個英文單字以內或是八個中文字以內表達
+      不需要包含 \`\`\`json 標記
     `;
 
     const response = await fetch(CHAT_API_URL, {
