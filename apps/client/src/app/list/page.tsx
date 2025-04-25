@@ -72,7 +72,7 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 h-full">
       <div>
         <div className="flex justify-between">
           <h2 className="text-4xl font-bold mb-5">All Tasks</h2>
@@ -96,117 +96,119 @@ export default function Page() {
         </Tabs>
       </div>
 
-      <Table
-        shadow="none"
-        aria-label="task table"
-        isHeaderSticky
-        className="border rounded-lg border-custom"
-        classNames={{
-          th: 'text-base',
-          tr: '!shadow-none text-base',
-          td: 'h-[60px]',
-        }}
-        removeWrapper
-      >
-        <TableHeader columns={tableHeader}>
-          {tableHeader.map((item) => (
-            <TableColumn
-              key={item.key}
-              width={item.width}
-              minWidth={item.minWidth}
-              className="rounded-none text-black"
-            >
-              {item.label}
-            </TableColumn>
-          ))}
-        </TableHeader>
-        <TableBody
-          items={filteredData}
-          isLoading={isLoading}
-          loadingContent="Loading..."
-          emptyContent="No data"
+      <div className="flex-1 overflow-auto scrollbar-hide">
+        <Table
+          shadow="none"
+          aria-label="task table"
+          isHeaderSticky
+          className="border rounded-lg border-custom"
+          classNames={{
+            th: 'text-base',
+            tr: '!shadow-none text-base',
+            td: 'h-[60px]',
+          }}
+          removeWrapper
         >
-          {(item) => (
-            <TableRow key={item.id}>
-              <TableCell>
-                <div
-                  className="flex gap-4 cursor-pointer"
-                  onClick={() => handleOpenCardModal(item.id)}
-                >
-                  <span className="flex-1">{item.title}</span>
-                  <IconEye className="w-6 h-6 text-primary" />
-                </div>
-              </TableCell>
-              <TableCell>
-                <Avatar
-                  alt="fffff"
-                  className="flex-shrink-0"
-                  size="md"
-                  name="Neil"
-                />
-              </TableCell>
-              <TableCell>
-                <div className="flex gap-4">
-                  <span>{dayjs(item.expired_at).format('YYYY/MM/DD')}</span>
-                  {item.status === TaskStatus.COMPLETED ? (
-                    <IconCheckCircle className="w-5 h-5 text-success"></IconCheckCircle>
-                  ) : item.isExpired ? (
-                    <IconAlert className="w-5 h-5 text-danger"></IconAlert>
-                  ) : (
-                    item.willExpireInThreeDays && (
-                      <IconClock className="w-5 h-5 text-warning"></IconClock>
-                    )
-                  )}
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="pr-4">
-                  <Progress
-                    aria-label="Loading..."
-                    size="sm"
-                    showValueLabel={true}
-                    value={computedPercentage(item.subTasks)}
+          <TableHeader columns={tableHeader}>
+            {tableHeader.map((item) => (
+              <TableColumn
+                key={item.key}
+                width={item.width}
+                minWidth={item.minWidth}
+                className="rounded-none text-black"
+              >
+                {item.label}
+              </TableColumn>
+            ))}
+          </TableHeader>
+          <TableBody
+            items={filteredData}
+            isLoading={isLoading}
+            loadingContent="Loading..."
+            emptyContent="No data"
+          >
+            {(item) => (
+              <TableRow key={item.id}>
+                <TableCell>
+                  <div
+                    className="flex gap-4 cursor-pointer"
+                    onClick={() => handleOpenCardModal(item.id)}
+                  >
+                    <span className="flex-1">{item.title}</span>
+                    <IconEye className="w-6 h-6 text-primary" />
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Avatar
+                    alt="fffff"
+                    className="flex-shrink-0"
+                    size="md"
+                    name="Neil"
                   />
-                </div>
-              </TableCell>
-              <TableCell>
-                <Chip
-                  size="lg"
-                  color={
-                    item.status === TaskStatus.COMPLETED
-                      ? 'success'
-                      : item.status === TaskStatus.PROGRESS
-                      ? 'primary'
-                      : 'default'
-                  }
-                >
-                  {TASK_STATUS[item.status]?.label}
-                </Chip>
-              </TableCell>
-              <TableCell>
-                <div className="flex gap-4">
-                  <Button
-                    isIconOnly
-                    variant="light"
-                    className="w-6 h-6 min-w-6 min-h-6"
-                    onPress={() => handleOpenEditCardModal(item)}
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-4 items-center">
+                    <span>{dayjs(item.expired_at).format('YYYY/MM/DD')}</span>
+                    {item.status === TaskStatus.COMPLETED ? (
+                      <IconCheckCircle className="w-5 h-5 text-success"></IconCheckCircle>
+                    ) : item.isExpired ? (
+                      <IconAlert className="w-5 h-5 text-danger"></IconAlert>
+                    ) : (
+                      item.willExpireInThreeDays && (
+                        <IconClock className="w-5 h-5 text-warning"></IconClock>
+                      )
+                    )}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="pr-4">
+                    <Progress
+                      aria-label="Loading..."
+                      size="sm"
+                      showValueLabel={true}
+                      value={computedPercentage(item.subTasks)}
+                    />
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Chip
+                    size="lg"
+                    color={
+                      item.status === TaskStatus.COMPLETED
+                        ? 'success'
+                        : item.status === TaskStatus.PROGRESS
+                        ? 'primary'
+                        : 'default'
+                    }
                   >
-                    <IconEdit className="w-5 h-5 text-default-700" />
-                  </Button>
-                  <Button
-                    isIconOnly
-                    variant="light"
-                    className="w-6 h-6 min-w-6 min-h-6"
-                    onPress={() => handleDeleteCard(item)}
-                  >
-                    <IconTrash className="w-6 h-6 text-danger" />
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+                    {TASK_STATUS[item.status]?.label}
+                  </Chip>
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-4">
+                    <Button
+                      isIconOnly
+                      variant="light"
+                      className="w-6 h-6 min-w-6 min-h-6"
+                      onPress={() => handleOpenEditCardModal(item)}
+                    >
+                      <IconEdit className="w-5 h-5 text-default-700" />
+                    </Button>
+                    <Button
+                      isIconOnly
+                      variant="light"
+                      className="w-6 h-6 min-w-6 min-h-6"
+                      onPress={() => handleDeleteCard(item)}
+                    >
+                      <IconTrash className="w-6 h-6 text-danger" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

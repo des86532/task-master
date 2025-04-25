@@ -24,12 +24,10 @@ export default function Chat() {
 
       const response = await postChatMessage([...messages, newMessage]);
 
-      // Check if response has error
       if (response.error) {
         throw new Error(response.error);
       }
 
-      // Check if response has the expected structure
       if (!response.choices?.[0]?.message?.content) {
         throw new Error('Invalid response format from server');
       }
@@ -59,12 +57,12 @@ export default function Chat() {
   }, [messages]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-full overflow-hidden">
       <h2 className="text-4xl font-bold mb-5">Chat</h2>
-      <div className="h-full">
+      <div className="flex-1 flex flex-col overflow-auto">
         <div
           ref={chatroomRef}
-          className="overflow-y-auto p-2 max-h-[calc(100%-40px)] min-h-80 rounded-md border scrollbar-hide"
+          className="overflow-y-auto overflow-x-hidden p-2 max-h-[calc(100%-40px)] min-h-80 rounded-md border scrollbar-hide"
         >
           {messages.map((msg) => (
             <div
@@ -73,11 +71,18 @@ export default function Chat() {
                 msg.role === 'user' ? 'text-right' : 'text-left'
               }`}
             >
-              <div className="inline-flex px-2 py-1 bg-gray-200 rounded-md">
+              <p className="inline-flex px-2 py-1 bg-gray-200 rounded-md whitespace-pre-line">
                 {msg.content}
-              </div>
+              </p>
             </div>
           ))}
+          <div
+            className={`transition-height flex justify-center overflow-hidden ${
+              isLoading ? 'h-10' : 'h-0'
+            }`}
+          >
+            loading...
+          </div>
         </div>
         <div className="flex mt-4">
           <Input
