@@ -1,96 +1,69 @@
 'use client';
 import { Card, Spinner } from '@heroui/react';
-import { getTaskStats, getTasksStatsMonthly } from '@/app/_api/task';
-import { useEffect, useState, useRef } from 'react';
+import { TASK_API } from '@/app/_api/task';
+import { useEffect, useRef, useMemo } from 'react';
 import { Chart, registerables } from 'chart.js';
 import { MonthTaskStatsType, TaskSummaryType } from '@task-master/shared';
 import dayjs from 'dayjs';
+import useFetchData from '@/app/_hooks/useFetchData';
 
 // 註冊 Chart.js 的所有組件
 Chart.register(...registerables);
 
 export default function Dashboard() {
-  const [loading, setLoading] = useState(true);
-  const [summaryData, setSummaryData] = useState<TaskSummaryType | null>(null);
-  const [dataMonthly, setDataMonthly] = useState<MonthTaskStatsType[] | null>(
-    null
+  const { data: summaryData, isLoading: isLoadingSummary } =
+    useFetchData<TaskSummaryType>(TASK_API.taskSummary);
+
+  const { data: dataMonthly, isLoading: isLoadingMonthly } = useFetchData<
+    MonthTaskStatsType[]
+  >(TASK_API.taskSummaryMonthly);
+
+  const loading = useMemo(
+    () => isLoadingMonthly || isLoadingSummary,
+    [isLoadingMonthly, isLoadingSummary]
   );
 
   const chartRef = useRef<HTMLCanvasElement | null>(null);
-  const [chartInstance, setChartInstance] = useState<Chart | null>(null);
-
-  // 初始化數據
-  const init = async () => {
-    try {
-      setLoading(true);
-      const [summaryResponse, monthlyResponse] = await Promise.all([
-        getTaskStats(),
-        getTasksStatsMonthly(),
-      ]);
-      setSummaryData(summaryResponse);
-      setDataMonthly(monthlyResponse);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 初始化數據和圖表
-  useEffect(() => {
-    init();
-
-    // 組件卸載時銷毀圖表實例
-    return () => {
-      if (chartInstance) {
-        chartInstance.destroy();
-      }
-    };
-  }, []);
 
   // 更新圖表
   useEffect(() => {
-    if (chartRef.current && dataMonthly) {
-      // 銷毀舊的圖表實例
-      if (chartInstance) {
-        chartInstance.destroy();
-      }
+    let newChart: Chart | null = null;
 
-      // 創建新的圖表實例
+    if (!loading && chartRef.current && dataMonthly) {
       const ctx = chartRef.current.getContext('2d');
       if (ctx) {
-        const newChartInstance = new Chart(ctx, {
-          type: 'bar', // 主要圖表類型為長條圖
+        newChart = new Chart(ctx, {
+          type: 'bar',
           data: {
             labels: dataMonthly.map(
               (stat) =>
                 `${dayjs(stat.startDate).format('YYYY/MM/DD')} - ${dayjs(
                   stat.endDate
                 ).format('YYYY/MM/DD')}`
-            ), // X 軸為日期範圍
+            ),
             datasets: [
               {
-                type: 'line', // 折線圖
+                type: 'line',
                 label: 'Pending',
-                data: dataMonthly.map((stat) => stat.pending), // Y 軸為 pending 數量
+                data: dataMonthly.map((stat) => stat.pending),
                 borderColor: 'rgba(75, 192, 192, 1)',
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 fill: true,
                 yAxisID: 'y',
               },
               {
-                type: 'bar', // 長條圖 1
+                type: 'bar',
                 label: 'Progress',
-                data: dataMonthly.map((stat) => stat.progress), // Y 軸為 progress 數量
+                data: dataMonthly.map((stat) => stat.progress),
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1,
                 yAxisID: 'y',
               },
               {
-                type: 'bar', // 長條圖 2
+                type: 'bar',
                 label: 'Completed',
-                data: dataMonthly.map((stat) => stat.completed), // Y 軸為 completed 數量
+                data: dataMonthly.map((stat) => stat.completed),
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
@@ -122,10 +95,13 @@ export default function Dashboard() {
             },
           },
         });
-        setChartInstance(newChartInstance);
       }
     }
-  }, [dataMonthly]);
+
+    return () => {
+      newChart?.destroy();
+    };
+  }, [dataMonthly, loading]);
 
   const data = [
     {
@@ -138,15 +114,15 @@ export default function Dashboard() {
     },
     {
       title: 'Daily Completed',
-      value: summaryData?.completed.day ?? 0,
+      value: summaryData?.completed?.day ?? 0,
     },
     {
       title: 'Weekly Completed',
-      value: summaryData?.completed.week ?? 0,
+      value: summaryData?.completed?.week ?? 0,
     },
     {
       title: 'Monthly Completed',
-      value: summaryData?.completed.month ?? 0,
+      value: summaryData?.completed?.month ?? 0,
     },
   ];
 

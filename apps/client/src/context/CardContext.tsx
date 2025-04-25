@@ -78,7 +78,7 @@ export const CardProvider = ({ children }: { children: React.ReactNode }) => {
     error: cardError,
     isLoading: cardLoading,
     mutate: updateCards,
-  } = useFetchData<TaskType[]>(TASK_API.allTask());
+  } = useFetchData<TaskType[]>(TASK_API.allTask);
 
   const handleOpenCardModal = (cardId: number) => {
     const card = cardList?.find((item) => item.id === cardId);

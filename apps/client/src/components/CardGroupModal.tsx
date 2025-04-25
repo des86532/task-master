@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Modal,
   ModalHeader,
@@ -12,12 +12,13 @@ import {
 import { useCard } from '@/context/CardContext';
 import Card from '@/components/Card';
 import { TaskType } from '@task-master/shared';
-import { getAllTask } from '@/app/_api/task';
+import { TASK_API } from '@/app/_api/task';
+import useFetchData from '@/app/_hooks/useFetchData';
 
 export default function CardGroupModal() {
-  const [cardList, setCardList] = useState<TaskType[]>([]);
   const { isCardGroupModalOpen, setIsCardGroupModalOpen } = useCard();
   const [selectedCardList, setSelectedCardList] = useState<TaskType[]>([]);
+  const { data: cardList } = useFetchData<TaskType[]>(TASK_API.allTask);
 
   const handleToggleSelect = (card: TaskType) => {
     setSelectedCardList((prev) => {
@@ -41,21 +42,6 @@ export default function CardGroupModal() {
     setSelectedCardList([]);
   };
 
-  const fetchData = async () => {
-    try {
-      const response = await getAllTask({ status: 'pending' });
-      setCardList(response);
-    } catch (error) {
-      console.error('Failed to fetch data:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (!isCardGroupModalOpen) return;
-
-    fetchData();
-  }, [isCardGroupModalOpen]);
-
   return (
     <Modal
       size="5xl"
@@ -68,7 +54,7 @@ export default function CardGroupModal() {
         <>
           <ModalHeader className="flex flex-col gap-1">Card Group</ModalHeader>
           <ModalBody>
-            {cardList.length === 0 && (
+            {cardList?.length === 0 && (
               <div className="flex justify-center items-center h-full">
                 No card found
               </div>
