@@ -38,7 +38,7 @@ export class AuthService {
         provider_id,
         email,
         name,
-        avatar_url: avatar,
+        avatar: avatar,
       });
       await this.userRepository.save(user);
     }
@@ -53,7 +53,7 @@ export class AuthService {
       user: {
         email: user.email,
         name: user.name,
-        avatar: user.avatar_url,
+        avatar: user.avatar,
       },
     };
   }

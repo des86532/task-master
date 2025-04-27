@@ -4,6 +4,13 @@ export enum TaskStatus {
   COMPLETED = 'completed',
 }
 
+export type UserType = {
+  id: number;
+  name: string;
+  email: string;
+  avatar: string;
+};
+
 export type TaskType = {
   id: number;
   title: string;
@@ -13,6 +20,8 @@ export type TaskType = {
   subTasks: SubTaskType[];
   created_at: string;
   updated_at: string;
+  created_by: UserType;
+  updated_by: UserType;
   expired_at: string;
   willExpireInThreeDays: boolean;
   isExpired: boolean;

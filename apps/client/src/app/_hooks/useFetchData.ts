@@ -1,7 +1,8 @@
 import useSWR, { SWRConfiguration } from 'swr';
+import axiosInstance from '@/app/_api/axiosInstance';
 
 // 封裝 fetcher 函數
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => axiosInstance.get(url).then((res) => res.data);
 
 // 自定義 Hook，封裝 useSWR 和 fetcher
 const useFetchData = <T>(

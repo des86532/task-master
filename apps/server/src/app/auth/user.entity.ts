@@ -18,7 +18,7 @@ export class User {
   name: string;
 
   @Column()
-  avatar_url: string;
+  avatar: string;
 
   @Column({
     type: 'timestamp',

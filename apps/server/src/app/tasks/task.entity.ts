@@ -1,5 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { SubTask } from './sub-task.entity';
+import { User } from '../auth/user.entity';
 
 @Entity('tasks')
 export class Task {
@@ -20,6 +28,14 @@ export class Task {
 
   @OneToMany(() => SubTask, (subTask) => subTask.task, { cascade: true })
   subTasks: SubTask[];
+
+  @ManyToOne(() => User, (user) => user.id)
+  @JoinColumn({ name: 'created_by' })
+  created_by: User;
+
+  @ManyToOne(() => User, (user) => user.id)
+  @JoinColumn({ name: 'updated_by' })
+  updated_by: User;
 
   @Column({
     type: 'timestamp',

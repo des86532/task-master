@@ -1,12 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Task } from './task.entity';
 import { SubTask } from './sub-task.entity';
+import { User } from '../auth/user.entity';
 import {
   TaskStatus,
   MonthTaskStatsType,
   TaskSummaryType,
+  TaskType,
+  UserType,
 } from '@task-master/shared';
 
 @Injectable()
@@ -18,12 +21,12 @@ export class TasksService {
     private subTaskRepository: Repository<SubTask>
   ) {}
 
-  async findAll(filter: any): Promise<Task[]> {
+  async findAll(filter: any): Promise<TaskType[]> {
     try {
       // 使用更簡單的 find 方法，不使用 QueryBuilder
       const tasks = await this.tasksRepository.find({
         where: filter,
-        relations: ['subTasks'],
+        relations: ['subTasks', 'created_by', 'updated_by'],
         order: { id: 'ASC' },
       });
 
@@ -34,34 +37,32 @@ export class TasksService {
         }
       });
 
-      const currentDate = new Date();
-      return tasks.map((task) => {
-        const expiredAt = new Date(task.expired_at);
-        const isExpired = expiredAt < currentDate;
-        const willExpireInThreeDays =
-          expiredAt.getTime() - currentDate.getTime() <=
-            3 * 24 * 60 * 60 * 1000 && !isExpired;
-        return {
-          ...task,
-          willExpireInThreeDays,
-          isExpired,
-        };
-      });
+      return tasks.map((task) => this.formatTask(task));
     } catch (error) {
       console.error('Error in findAll:', error);
       throw error;
     }
   }
 
-  findOne(id: number): Promise<Task> {
-    return this.tasksRepository.findOne({
-      where: { id },
-      relations: ['subTasks'],
-    });
+  async findOne(id: number): Promise<TaskType> {
+    try {
+      const task = await this.tasksRepository.findOne({
+        where: { id },
+        relations: ['subTasks', 'created_by', 'updated_by'],
+      });
+      return this.formatTask(task);
+    } catch (error) {
+      console.error('Error in findOne:', error);
+      throw error;
+    }
   }
 
-  async create(task: Partial<Task>): Promise<Task> {
-    const newTask = this.tasksRepository.create(task);
+  async create(task: Partial<Task>, user: User): Promise<TaskType> {
+    const newTask = this.tasksRepository.create({
+      ...task,
+      created_by: user,
+      updated_by: user,
+    });
 
     if (task.subTasks) {
       newTask.subTasks = task.subTasks.map((subTask) => {
@@ -70,10 +71,16 @@ export class TasksService {
       });
     }
 
-    return this.tasksRepository.save(newTask);
+    const savedTask = await this.tasksRepository.save(newTask);
+    // 重新查一次，帶 relations
+    const fullTask = await this.tasksRepository.findOne({
+      where: { id: savedTask.id },
+      relations: ['subTasks', 'created_by', 'updated_by'],
+    });
+    return this.formatTask(fullTask);
   }
 
-  async update(id: number, task: Partial<Task>): Promise<Task> {
+  async update(id: number, task: Partial<Task>, user: User): Promise<TaskType> {
     // 先確保 task 存在
     const existingTask = await this.tasksRepository.findOne({
       where: { id },
@@ -81,9 +88,8 @@ export class TasksService {
     });
 
     // 更新主任務（不包括 subTasks）
-    const taskToUpdate = { ...task };
+    const taskToUpdate = { ...task, updated_by: user };
     delete taskToUpdate.subTasks;
-
     await this.tasksRepository.update(id, taskToUpdate);
 
     // 處理 subTasks
@@ -131,17 +137,25 @@ export class TasksService {
     }
 
     // 返回更新後的 task 及其 subTasks
-    return this.tasksRepository.findOne({
+    const fullTask = await this.tasksRepository.findOne({
       where: { id },
-      relations: ['subTasks'],
+      relations: ['subTasks', 'created_by', 'updated_by'],
     });
+    return this.formatTask(fullTask);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number, user: User): Promise<void> {
     const task = await this.tasksRepository.findOne({
       where: { id },
-      relations: ['subTasks'],
+      relations: ['subTasks', 'created_by'],
     });
+
+    // 非創建者不可刪除
+    if (task.created_by !== null && task.created_by.id !== user.id) {
+      throw new UnauthorizedException(
+        'You are not authorized to delete this task'
+      );
+    }
 
     if (task) {
       if (task.subTasks && task.subTasks.length > 0) {
@@ -303,5 +317,33 @@ export class TasksService {
     }
 
     return weeklyStats;
+  }
+
+  private formatTask(task: Task): TaskType {
+    const currentDate = new Date();
+    const expiredAt = new Date(task.expired_at);
+    const isExpired = expiredAt < currentDate;
+    const willExpireInThreeDays =
+      expiredAt.getTime() - currentDate.getTime() <= 3 * 24 * 60 * 60 * 1000 &&
+      !isExpired;
+
+    return {
+      ...task,
+      status: task.status as TaskStatus,
+      created_by: this.formatUser(task.created_by),
+      updated_by: this.formatUser(task.updated_by),
+      willExpireInThreeDays,
+      isExpired,
+    };
+  }
+
+  private formatUser(user: User | null): UserType | null {
+    if (!user) return null;
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+    };
   }
 }

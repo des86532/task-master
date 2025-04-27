@@ -143,7 +143,8 @@ export default function Page() {
                     alt="fffff"
                     className="flex-shrink-0"
                     size="md"
-                    name="Neil"
+                    name={item.updated_by?.name}
+                    src={item.updated_by?.avatar}
                   />
                 </TableCell>
                 <TableCell>
