@@ -129,12 +129,13 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col h-full">
       <h2 className="text-4xl font-bold mb-5">Dashboard</h2>
-      <div className="px-2 flex flex-col gap-4 flex-1">
+      <div className="p-2 flex flex-col gap-4 flex-1">
         <div className="flex gap-4">
           {data.map((item, index) => (
             <Card
-              className=" border border-transparent dark:border-default-100 flex-1"
+              className="border border-transparent dark:border-default-100 flex-1"
               key={index}
+              shadow="sm"
             >
               <div className="flex p-4 h-full">
                 <div className="flex flex-col gap-y-2 justify-between">
@@ -149,7 +150,7 @@ export default function Dashboard() {
             </Card>
           ))}
         </div>
-        <Card className="flex-1 flex justify-center items-center">
+        <Card className="flex-1 flex justify-center items-center" shadow="sm">
           <div className="p-4 flex justify-center items-center w-full h-full">
             {loading ? (
               <Spinner size="lg" />
