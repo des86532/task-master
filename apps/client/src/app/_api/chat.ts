@@ -1,4 +1,5 @@
 import type { ChatMessage } from '@task-master/shared';
+import axios from 'axios';
 
 const API_BASE_URL =
   process.env.NODE_ENV === 'production'
@@ -7,30 +8,16 @@ const API_BASE_URL =
 
 // 發送訊息
 export const postChatMessage = async (messages: ChatMessage[]) => {
-  const response = await fetch(`${API_BASE_URL}/api/chat`, {
-    method: 'Post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(messages),
-  });
-
-  return response.json();
+  const response = await axios.post(`${API_BASE_URL}/api/chat`, messages);
+  return response.data;
 };
 
 // 生成子任務
 export const generateSubTasks = async (description: string) => {
-  const response = await fetch(`${API_BASE_URL}/api/chat/generate-subtasks`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ description }),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to generate subtasks');
-  }
-
-  return response.json();
+  const response = await axios.post(
+    `${API_BASE_URL}/api/chat/generate-subtasks`,
+    { description }
+  );
+  // Axios throws an error for non-2xx status codes by default
+  return response.data;
 };

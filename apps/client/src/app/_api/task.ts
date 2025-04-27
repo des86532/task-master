@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { TaskType } from '@task-master/shared';
 
 const API_BASE_URL =
@@ -18,61 +19,33 @@ export const TASK_API = {
 
 // 建立新任務
 export const createTask = async (task: Partial<TaskType>) => {
-  const response = await fetch(TASK_API.allTask, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(task),
-  });
-  return response.json();
+  const response = await axios.post(TASK_API.allTask, task);
+  return response.data;
 };
 
 // 刪除任務
 export const deleteTask = async (id: number) => {
-  const response = await fetch(TASK_API.oneTask(id), {
-    method: 'DELETE',
-  });
+  const response = await axios.delete(TASK_API.oneTask(id));
 
-  const responseText = await response.text();
-
-  if (responseText.length > 0) {
-    return response.json();
+  if (response.data.length > 0) {
+    return response.data;
   }
 };
 
 // Put 更新任務
 export const updateTask = async (id: number, task: Partial<TaskType>) => {
-  const response = await fetch(TASK_API.oneTask(id), {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(task),
-  });
-  return response.json();
+  const response = await axios.put(TASK_API.oneTask(id), task);
+  return response.data;
 };
 
 // Patch更新任務
 export const patchTask = async (id: number, task: Partial<TaskType>) => {
-  const response = await fetch(TASK_API.oneTask(id), {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(task),
-  });
-  return response.json();
+  const response = await axios.patch(TASK_API.oneTask(id), task);
+  return response.data;
 };
 
 // 修改大量任務
 export const patchManyTask = async (ids: number[], task: Partial<TaskType>) => {
-  const response = await fetch(TASK_API.allTask, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ ids, task }),
-  });
-  return response.json();
+  const response = await axios.patch(TASK_API.allTask, { ids, task });
+  return response.data;
 };

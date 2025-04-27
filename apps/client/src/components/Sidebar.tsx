@@ -6,7 +6,6 @@ import {
   TokenResponse,
   googleLogout,
 } from '@react-oauth/google';
-import axios from 'axios';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { postLogin } from '@/app/_api/auth';
@@ -98,7 +97,7 @@ export default function Sidebar() {
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'List', href: '/list' },
     { name: 'Calendar', href: '/calendar' },
-    { name: 'Chat', href: '/chat' },
+    { name: 'AI Chat', href: '/chat' },
     { name: 'Setting', href: '/setting' },
   ];
 
