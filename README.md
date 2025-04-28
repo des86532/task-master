@@ -102,8 +102,8 @@ task-master/
 
 ### Backend
 
-- Deployed on Railway
-- PostgreSQL database
+- Deployed on Render
+- PostgreSQL database on Supabase
 - Automatic scaling and monitoring
 
 ## Testing
