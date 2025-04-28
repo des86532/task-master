@@ -14,10 +14,7 @@ import { User } from './auth/user.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url:
-        process.env.NODE_ENV == 'production'
-          ? process.env.DATABASE_URL
-          : 'postgres://postgres:postgres@localhost:5432/task_master',
+      url: process.env.DATABASE_URL,
       entities: [Task, SubTask, User],
       synchronize: process.env.NODE_ENV !== 'production',
     }),
