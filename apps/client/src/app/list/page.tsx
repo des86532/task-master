@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useCard } from '@/context/CardContext';
 import {
   Tabs,
@@ -70,6 +70,10 @@ export default function Page() {
 
     return (list.filter((item) => item.status).length / list.length) * 100;
   };
+
+  useEffect(() => {
+    console.log(cardList);
+  }, [cardList]);
 
   return (
     <div className="flex flex-col gap-8 h-full">
@@ -143,6 +147,7 @@ export default function Page() {
                     alt="fffff"
                     className="flex-shrink-0"
                     size="md"
+                    showFallback
                     name={item.updated_by?.name}
                     src={item.updated_by?.avatar}
                   />

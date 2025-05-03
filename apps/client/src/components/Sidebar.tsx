@@ -87,7 +87,7 @@ export default function Sidebar() {
   const handleLogout = () => {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('tokenExpiry');
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem('token');
 
     setUserInfo({ name: null, picture: null, email: null });
     googleLogout();

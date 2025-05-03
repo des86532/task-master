@@ -29,12 +29,26 @@ export class Task {
   @OneToMany(() => SubTask, (subTask) => subTask.task, { cascade: true })
   subTasks: SubTask[];
 
+  @Column({
+    type: 'int',
+    nullable: true,
+    default: null,
+  })
+  created_by_id: number;
+
+  @Column({
+    type: 'int',
+    nullable: true,
+    default: null,
+  })
+  updated_by_id: number;
+
   @ManyToOne(() => User, (user) => user.id)
-  @JoinColumn({ name: 'created_by' })
+  @JoinColumn({ name: 'created_by_id' })
   created_by: User;
 
   @ManyToOne(() => User, (user) => user.id)
-  @JoinColumn({ name: 'updated_by' })
+  @JoinColumn({ name: 'updated_by_id' })
   updated_by: User;
 
   @Column({

@@ -60,8 +60,8 @@ export class TasksService {
   async create(task: Partial<Task>, user: User): Promise<TaskType> {
     const newTask = this.tasksRepository.create({
       ...task,
-      created_by: user,
-      updated_by: user,
+      created_by_id: user.id,
+      updated_by_id: user.id,
     });
 
     if (task.subTasks) {
@@ -88,7 +88,7 @@ export class TasksService {
     });
 
     // 更新主任務（不包括 subTasks）
-    const taskToUpdate = { ...task, updated_by: user };
+    const taskToUpdate = { ...task, updated_by_id: user.id };
     delete taskToUpdate.subTasks;
     await this.tasksRepository.update(id, taskToUpdate);
 
@@ -151,7 +151,7 @@ export class TasksService {
     });
 
     // 非創建者不可刪除
-    if (task.created_by !== null && task.created_by.id !== user.id) {
+    if (task.created_by !== null && task.created_by_id !== user.id) {
       throw new UnauthorizedException(
         'You are not authorized to delete this task'
       );
