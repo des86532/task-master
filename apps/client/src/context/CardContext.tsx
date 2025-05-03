@@ -113,7 +113,7 @@ export const CardProvider = ({ children }: { children: React.ReactNode }) => {
         updateCards();
         setIsCardModalOpen(false);
       } catch (error) {
-        alert(error.response.data.message);
+        alert((error as any).response.data.message || '刪除卡片失敗');
       }
     }
   };
