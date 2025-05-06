@@ -83,16 +83,6 @@ pnpm nx run client:dev
 pnpm nx run server:serve
 ```
 
-## Project Structure
-
-task-master/
-├── apps/
-│ ├── client/ # Next.js frontend
-│ ├── client-e2e/ # Playwright frontend tests
-│ ├── server/ # NestJS backend
-│ └── server-e2e/ # Jest backend tests
-└── shared/ # Shared types and mock data
-
 ## Deployment
 
 ### Frontend
